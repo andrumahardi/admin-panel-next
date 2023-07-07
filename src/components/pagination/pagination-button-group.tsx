@@ -86,9 +86,8 @@ type ArrowButtonProps = {
 function ArrowButtons({ href, isDisabled, children }: ArrowButtonProps) {
 	return (
 		<IconButton
-			as={Link}
-			href={href}
 			shallow={false}
+			{...(isDisabled ? {} : { as: Link, href })}
 			isDisabled={isDisabled}
 			colorScheme={buttonColorScheme}
 			size={buttonSize}
