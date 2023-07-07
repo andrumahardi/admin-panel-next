@@ -1,3 +1,5 @@
+"use client";
+
 import { URLS, sidemenu } from "@/constants";
 import {
 	Accordion,

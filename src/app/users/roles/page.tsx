@@ -1,5 +1,4 @@
-import { MainContainer } from "@/components/containers";
-import { Roles } from "@/pages/roles-page";
+import { MainContainer, Roles } from "@/components";
 
 export default function PermissionsPage() {
 	return (

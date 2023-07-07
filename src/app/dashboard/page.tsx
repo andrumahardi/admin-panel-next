@@ -1,5 +1,4 @@
-import { MainContainer } from "@/components/containers";
-import { Dashboard } from "@/pages/dashboard-page";
+import { Dashboard, MainContainer } from "@/components";
 
 export default function DashboardPage() {
 	return (

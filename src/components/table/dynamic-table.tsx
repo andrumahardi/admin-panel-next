@@ -10,13 +10,13 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { RowBtnGroup } from "./row-btn-group";
-import { URLS } from "@/constants";
 
 export type DynamicTableProps = {
 	data: Record<string, any>[];
 	headColumns: Array<{ key: string; name: string }>;
 	toggleSelectRow: (id: number) => void;
 	handleDeleteRow: (id: number) => void;
+	rootUrl: string;
 };
 
 export function DynamicTable({
@@ -24,6 +24,7 @@ export function DynamicTable({
 	headColumns,
 	toggleSelectRow,
 	handleDeleteRow,
+	rootUrl,
 }: DynamicTableProps) {
 	return (
 		<TableContainer>
@@ -57,8 +58,8 @@ export function DynamicTable({
 								<Td>
 									<RowBtnGroup
 										links={{
-											view: URLS.PERMISSION_VIEW(item.id),
-											edit: URLS.PERMISSION_EDIT(item.id),
+											view: `${rootUrl}/${item.id}`,
+											edit: `${rootUrl}/${item.id}/edit`,
 										}}
 										onDelete={() => handleDeleteRow(item.id)}
 									/>

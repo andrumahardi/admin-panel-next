@@ -4,11 +4,8 @@ import { Box, Button, HStack, Input, Text, VStack } from "@chakra-ui/react";
 import { usePagination, useTableActions } from "@/hooks";
 import React from "react";
 import { arrayObjectToCSV } from "@/utils";
-import {
-	PaginationButtonGroup,
-	PaginationSizeOptions,
-} from "@/components/pagination";
-import { DynamicTable } from "@/components/table";
+import { PaginationButtonGroup, PaginationSizeOptions } from "@/components";
+import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
 
 export function Permissions() {
@@ -75,6 +72,7 @@ export function Permissions() {
 						]}
 						toggleSelectRow={toggleSelectRow}
 						handleDeleteRow={handleDeleteRow}
+						rootUrl={URLS.PERMISSIONS}
 					/>
 				</Box>
 				<HStack w='full' justifyContent='space-between'>

@@ -1,5 +1,4 @@
-import { MainContainer } from "@/components/containers";
-import { Permissions } from "@/pages/permissions-page";
+import { MainContainer, Permissions } from "@/components";
 
 export default function PermissionsPage() {
 	return (

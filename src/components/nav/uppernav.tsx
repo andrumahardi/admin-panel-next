@@ -1,3 +1,5 @@
+"use client";
+
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { HStack, IconButton } from "@chakra-ui/react";
 

@@ -1,5 +1,4 @@
-import { AuthContainer } from "@/components/containers";
-import { ResetPassword } from "@/pages/reset-password-page";
+import { AuthContainer, ResetPassword } from "@/components";
 
 export default function ResetPasswordPage() {
 	return (

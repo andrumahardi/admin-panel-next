@@ -52,7 +52,6 @@ export function PaginationButtonGroup({
 								"page",
 								`${num > 1 ? num : ""}`
 							)}`}
-							shallow={false}
 							{...(currentPage === num
 								? { colorScheme: buttonColorScheme }
 								: {})}
@@ -86,7 +85,6 @@ type ArrowButtonProps = {
 function ArrowButtons({ href, isDisabled, children }: ArrowButtonProps) {
 	return (
 		<IconButton
-			shallow={false}
 			{...(isDisabled ? {} : { as: Link, href })}
 			isDisabled={isDisabled}
 			colorScheme={buttonColorScheme}
