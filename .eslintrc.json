@@ -1,7 +1,30 @@
 {
-  "env": {
-    "browser": true,
-    "es2021": true
-  },
-  "extends": ["eslint:recommended"]
+	"env": {
+		"browser": true,
+		"es2021": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"next/core-web-vitals",
+		"plugin:react/recommended",
+		"next",
+		"prettier",
+		"plugin:@typescript-eslint/eslint-recommended",
+		"plugin:@typescript-eslint/recommended"
+	],
+	"plugins": ["@typescript-eslint", "react"],
+	"parserOptions": {
+		"ecmaFeatures": {
+			"jsx": true
+		},
+		"ecmaVersion": "latest",
+		"sourceType": "module"
+	},
+	"rules": {
+		"indent": ["error", "tab", { "SwitchCase": 1 }],
+		"quotes": ["error", "double"],
+		"semi": ["error", "always"],
+    "no-console": "error",
+    "@typescript-eslint/no-unused-vars": "error"
+	}
 }
