@@ -24,7 +24,7 @@
 		"indent": ["error", "tab", { "SwitchCase": 1 }],
 		"quotes": ["error", "double"],
 		"semi": ["error", "always"],
-    "no-console": "error",
-    "@typescript-eslint/no-unused-vars": "error"
+		"no-console": "error",
+		"@typescript-eslint/no-unused-vars": "error"
 	}
 }
