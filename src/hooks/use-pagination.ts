@@ -14,13 +14,13 @@ export function usePagination({ targetUrl }: UsePaginationProps) {
 
 	const query = {
 		page: +(searchParams?.get("page") || 1),
-		perPage: +(searchParams?.get("perpage") || 10),
+		pageSize: +(searchParams?.get("pageSize") || 10),
 	};
 
-	function setPerPage(e: ChangeEvent<HTMLSelectElement>) {
+	function setPageSize(e: ChangeEvent<HTMLSelectElement>) {
 		const params = createQueryString(
 			searchParams?.toString() || "",
-			"perpage",
+			"pageSize",
 			e.target.value
 		);
 		router.push(`${targetUrl}${params}`);
@@ -28,6 +28,6 @@ export function usePagination({ targetUrl }: UsePaginationProps) {
 
 	return {
 		query,
-		setPerPage,
+		setPageSize,
 	};
 }

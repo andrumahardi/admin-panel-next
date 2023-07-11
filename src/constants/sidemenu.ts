@@ -69,6 +69,10 @@ export const sidemenu = [
 				name: "Type Account",
 				link: URLS.TYPE_ACCOUNTS,
 			},
+			{
+				name: "Chart of Account",
+				link: URLS.CHART_OF_ACCOUNTS,
+			},
 		],
 	},
 	{
@@ -86,10 +90,6 @@ export const sidemenu = [
 	{
 		name: "Expense",
 		link: URLS.EXPENSES,
-	},
-	{
-		name: "Chart of Account",
-		link: URLS.CHART_OF_ACCOUNTS,
 	},
 	{
 		name: "Journal Account",

@@ -9,19 +9,17 @@ import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
 
 export function Roles() {
-	const {
-		data,
-		selectAll,
-		deselectAll,
-		toggleSelectRow,
-		deleteSelected,
-		handleDeleteRow,
-	} = useTableActions();
+	const { contents, selectAll, deselectAll, toggleSelectRow, deleteSelected } =
+		useTableActions({ data: [] });
 
 	const {
-		query: { page, perPage },
-		setPerPage,
+		query: { page, pageSize },
+		setPageSize,
 	} = usePagination({ targetUrl: URLS.ROLES });
+
+	function handleDelete(id: number) {
+		return id;
+	}
 
 	return (
 		<Box bgColor='#ffffff' borderRadius='10px'>
@@ -30,7 +28,7 @@ export function Roles() {
 			</Box>
 			<VStack p={4} alignItems='flex-start' spacing={4}>
 				<HStack w='full' justifyContent='space-between'>
-					<PaginationSizeOptions perPage={perPage} onChange={setPerPage} />
+					<PaginationSizeOptions pageSize={pageSize} onChange={setPageSize} />
 					<HStack spacing={2}>
 						<Button size='xs' colorScheme='blue' onClick={selectAll}>
 							Select all
@@ -38,12 +36,12 @@ export function Roles() {
 						<Button
 							size='xs'
 							colorScheme='blue'
-							isDisabled={data.every((el) => !el.checked)}
+							isDisabled={contents.every((el) => !el.checked)}
 							onClick={deselectAll}
 						>
 							Deselect all
 						</Button>
-						<Button size='xs' onClick={() => arrayObjectToCSV(data)}>
+						<Button size='xs' onClick={() => arrayObjectToCSV(contents)}>
 							CSV
 						</Button>
 						<Button size='xs' colorScheme='red' onClick={deleteSelected}>
@@ -59,7 +57,7 @@ export function Roles() {
 				</HStack>
 				<Box w='full'>
 					<DynamicTable
-						data={data}
+						data={[]}
 						headColumns={[
 							{
 								key: "id",
@@ -71,14 +69,14 @@ export function Roles() {
 							},
 						]}
 						toggleSelectRow={toggleSelectRow}
-						handleDeleteRow={handleDeleteRow}
+						handleDelete={handleDelete}
 						rootUrl={URLS.ROLES}
 					/>
 				</Box>
 				<HStack w='full' justifyContent='space-between'>
 					<HStack w='full' justifyContent='space-between'>
 						<Text>
-							Page {page} of {1} from {data.length} entries
+							Page {page} of {1} from {contents.length} entries
 						</Text>
 						<PaginationButtonGroup
 							rootUrl={URLS.ROLES}

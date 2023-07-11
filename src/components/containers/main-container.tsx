@@ -14,7 +14,7 @@ export function MainContainer({ children }: { children: React.ReactNode }) {
 
 	function compressNav() {
 		if (navWidth === sidenavWidth) {
-			setNavWidth("100px");
+			setNavWidth("0px");
 		} else {
 			setNavWidth(sidenavWidth);
 		}

@@ -10,3 +10,4 @@ export * from "./permissions";
 export * from "./reset-password";
 export * from "./roles";
 export * from "./table";
+export * from "./taxes";

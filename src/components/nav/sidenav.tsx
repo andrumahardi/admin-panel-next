@@ -34,11 +34,11 @@ const linkButtonColor = "#c2c7d0";
 const linkHoverBgColor = "#ffffff1a";
 
 export function SideNav({ activeLink }: Props) {
-	const rootLink = activeLink.split("/").slice(0, 3).join("/");
+	const rootLink = activeLink.split("/").slice(0, 2).join("/");
 	const router = useRouter();
 
 	function handleLogout() {
-		Cookies.remove("token");
+		Cookies.remove("token", { expires: 7 });
 		router.push(URLS.LOGIN);
 	}
 

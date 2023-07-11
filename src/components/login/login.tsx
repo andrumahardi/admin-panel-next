@@ -9,17 +9,21 @@ import {
 	Input,
 	Text,
 	VStack,
+	useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useMemo, useReducer } from "react";
-import { initialState, reducer, ACTION_TYPES, Fields } from "./login-reducer";
+import { initialState, reducer, Fields } from "./login-reducer";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { URLS } from "@/constants";
+import { useLogin } from "./queries";
 
 export function Login() {
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const router = useRouter();
+	const { mutate, isLoading } = useLogin();
+	const toast = useToast();
 
 	const canLogin = useMemo(() => {
 		let output = true;
@@ -33,8 +37,7 @@ export function Login() {
 
 	function onChange(e: ChangeEvent<HTMLInputElement>) {
 		dispatch({
-			type: ACTION_TYPES.CHANGE_FIELD,
-			name: e.target.name as "email" | "password",
+			name: e.target.name as keyof Fields,
 			value: e.target.value,
 		});
 	}
@@ -42,8 +45,25 @@ export function Login() {
 	function onSubmit(e: FormEvent) {
 		e.preventDefault();
 		if (canLogin) {
-			Cookies.set("token", JSON.stringify(state));
-			router.push(URLS.DASHBOARD);
+			mutate(
+				{ identifier: state.values.email, password: state.values.password },
+				{
+					onSuccess: ({ data }) => {
+						Cookies.set("token", data.jwt || "", { expires: 7 });
+						router.push(URLS.DASHBOARD);
+					},
+					onError: ({ response }) => {
+						const { error } = response?.data || {};
+						toast({
+							description: error?.message || "",
+							duration: 2e3,
+							isClosable: true,
+							position: "top",
+							status: "error",
+						});
+					},
+				}
+			);
 		}
 	}
 
@@ -72,7 +92,12 @@ export function Login() {
 			</FormControl>
 			<HStack w='full' justifyContent='space-between'>
 				<Checkbox fontWeight='semibold'>Remember me</Checkbox>
-				<Button colorScheme='blue' type='submit' isDisabled={!canLogin}>
+				<Button
+					isLoading={isLoading}
+					colorScheme='blue'
+					type='submit'
+					isDisabled={!canLogin}
+				>
 					Login
 				</Button>
 			</HStack>
