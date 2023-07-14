@@ -46,6 +46,10 @@ export const sidemenu = [
 				link: URLS.BANK_TRANSFERS,
 			},
 			{
+				name: "Department",
+				link: URLS.DEPARTMENTS,
+			},
+			{
 				name: "Customer Group",
 				link: URLS.CUSTOMER_GROUPS,
 			},

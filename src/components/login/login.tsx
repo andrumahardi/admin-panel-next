@@ -18,6 +18,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { URLS } from "@/constants";
 import { useLogin } from "./queries";
+import { errorHandler } from "@/utils";
 
 export function Login() {
 	const [state, dispatch] = useReducer(reducer, initialState);
@@ -52,15 +53,8 @@ export function Login() {
 						Cookies.set("token", data.jwt || "", { expires: 7 });
 						router.push(URLS.DASHBOARD);
 					},
-					onError: ({ response }) => {
-						const { error } = response?.data || {};
-						toast({
-							description: error?.message || "",
-							duration: 2e3,
-							isClosable: true,
-							position: "top",
-							status: "error",
-						});
+					onError: (err) => {
+						errorHandler(err, toast);
 					},
 				}
 			);

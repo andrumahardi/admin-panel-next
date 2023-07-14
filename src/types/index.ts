@@ -1,2 +1,2 @@
-export { type FetchError } from "./fetch-error";
-export { type GenericObject } from "./generic-object";
+export * from "./fetch-error";
+export * from "./generic-object";

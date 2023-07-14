@@ -2,10 +2,8 @@ type TaxesResponse = {
 	data: Array<{
 		id: number;
 		attributes: {
-			Name: string;
-			Rate: number;
-			createdAt: string;
-			updatedAt: string;
+			name: string;
+			rate: number;
 		};
 	}>;
 };
@@ -13,10 +11,8 @@ type TaxesResponse = {
 type TaxResponse = {
 	data: {
 		attributes: {
-			Name: string;
-			Rate: number;
-			createdAt: string;
-			updatedAt: string;
+			name: string;
+			rate: number;
 		};
 	};
 };
@@ -25,10 +21,8 @@ export type TaxListModel = ReturnType<typeof taxListModel>;
 export function taxListModel({ data }: TaxesResponse) {
 	return data.map((el) => ({
 		id: el.id,
-		name: el.attributes.Name || "",
-		rate: el.attributes.Rate || 0,
-		createdDate: el.attributes.createdAt,
-		updatedDate: el.attributes.updatedAt,
+		name: el.attributes.name || "",
+		rate: el.attributes.rate || 0,
 		checked: false,
 	}));
 }
@@ -36,9 +30,7 @@ export function taxListModel({ data }: TaxesResponse) {
 export type TaxDetailModel = ReturnType<typeof taxDetailModel>;
 export function taxDetailModel({ data }: TaxResponse) {
 	return {
-		name: data.attributes.Name || "",
-		rate: data.attributes.Rate || 0,
-		createdDate: data.attributes.createdAt,
-		updatedDate: data.attributes.updatedAt,
+		name: data.attributes.name || "",
+		rate: data.attributes.rate || 0,
 	};
 }

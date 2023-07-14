@@ -33,7 +33,6 @@ import {
 	vendorsPathnameMatcher,
 } from "@/middlewares";
 import type { NextRequest } from "next/server";
-import { URLS } from "./constants";
 
 export function middleware(req: NextRequest) {
 	const pathname = req.nextUrl.pathname;
@@ -92,18 +91,18 @@ export const config = {
 	matcher: [
 		"/",
 		"/dashboard",
-		URLS.LOGIN,
-		`${URLS.BANK_ACCOUNTS}/:path*`,
-		`${URLS.BANK_TRANSFERS}/:path*`,
-		`${URLS.CATEGORIES}/:path*`,
-		`${URLS.CATEGORY_ACCOUNTS}/:path*`,
-		`${URLS.CATEGORY_TYPES}/:path*`,
-		`${URLS.CHART_OF_ACCOUNTS}/:path*`,
-		`${URLS.CORPORATES}/:path*`,
-		`${URLS.CUSTOMER_GROUPS}/:path*`,
-		`${URLS.PROVIDERS}/:path*`,
-		`${URLS.TAXES}/:path*`,
-		`${URLS.TYPE_ACCOUNTS}/:path*`,
-		`${URLS.VENDORS}/:path*`,
+		"/login",
+		"/bank-accounts/:path*",
+		"/bank-transfers/:path*",
+		"/categories/:path*",
+		"/category-accounts/:path*",
+		"/category-types/:path*",
+		"/chart-of-accounts/:path*",
+		"/corporates/:path*",
+		"/customer-groups/:path*",
+		"/providers/:path*",
+		"/taxes/:path*",
+		"/type-accounts/:path*",
+		"/vendors/:path*",
 	],
 };

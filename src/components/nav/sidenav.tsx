@@ -43,7 +43,7 @@ export function SideNav({ activeLink }: Props) {
 	}
 
 	return (
-		<VStack bgColor='#343a40' alignItems='flex-start' minH='full' pb={4}>
+		<VStack bgColor='#343a40' alignItems='flex-start' minH='100vh' pb={4}>
 			<Box w='full'>
 				<Text fontSize='20px' color='#c2c7d0' px={2} py={3}>
 					ERP

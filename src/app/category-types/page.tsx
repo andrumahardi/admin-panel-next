@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";
 import { ReactQueryHydrate } from "../../components/hydrate-client";
-import { getQueryClient } from "@/libs";
+import { getQueryClient } from "@/utils";
 import {
 	CategoryTypesQuery,
 	categoryTypeKeys,

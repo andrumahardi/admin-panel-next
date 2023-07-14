@@ -19,7 +19,6 @@ export type CategoryTypesQuery = {
 export type CreateCategoryTypeVariables = {
 	data: {
 		Name: string;
-		Rate: string;
 	};
 };
 

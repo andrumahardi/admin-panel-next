@@ -18,11 +18,7 @@ export function usePagination({ targetUrl }: UsePaginationProps) {
 	};
 
 	function setPageSize(e: ChangeEvent<HTMLSelectElement>) {
-		const params = createQueryString(
-			searchParams?.toString() || "",
-			"pageSize",
-			e.target.value
-		);
+		const params = createQueryString("", "pageSize", e.target.value);
 		router.push(`${targetUrl}${params}`);
 	}
 

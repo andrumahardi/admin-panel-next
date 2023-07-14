@@ -2,9 +2,13 @@ type ListResponse = {
 	data: Array<{
 		id: number;
 		attributes: {
-			Name: string;
-			createdAt: string;
-			updatedAt: string;
+			name: string;
+			category_type: {
+				id: number;
+				attributes: {
+					name: string;
+				};
+			};
 		};
 	}>;
 };
@@ -12,9 +16,13 @@ type ListResponse = {
 type DetailResponse = {
 	data: {
 		attributes: {
-			Name: string;
-			createdAt: string;
-			updatedAt: string;
+			name: string;
+			category_type: {
+				id: number;
+				attributes: {
+					name: string;
+				};
+			};
 		};
 	};
 };
@@ -23,9 +31,8 @@ export type CategoryListModel = ReturnType<typeof categoryListModel>;
 export function categoryListModel({ data }: ListResponse) {
 	return data.map((el) => ({
 		id: el.id,
-		name: el.attributes.Name || "",
-		createdDate: el.attributes.createdAt,
-		updatedDate: el.attributes.updatedAt,
+		name: el.attributes.name || "-",
+		categoryType: (el.attributes.category_type || {}).attributes?.name || "-",
 		checked: false,
 	}));
 }
@@ -33,8 +40,7 @@ export function categoryListModel({ data }: ListResponse) {
 export type CategoryDetailModel = ReturnType<typeof categoryDetailModel>;
 export function categoryDetailModel({ data }: DetailResponse) {
 	return {
-		name: data.attributes.Name || "",
-		createdDate: data.attributes.createdAt,
-		updatedDate: data.attributes.updatedAt,
+		name: data.attributes.name || "-",
+		categoryType: (data.attributes.category_type || {}).attributes?.name || "-",
 	};
 }

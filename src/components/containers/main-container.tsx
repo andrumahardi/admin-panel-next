@@ -22,11 +22,19 @@ export function MainContainer({ children }: { children: React.ReactNode }) {
 
 	return (
 		<Flex bgColor='#f4f6f9'>
-			<Box w={navWidth} transition='all .5s' h='100vh' overflow='auto'>
-				<SideNav
-					activeLink={pathname || "/"}
-					isCompressed={navWidth !== sidenavWidth}
-				/>
+			<Box
+				w={navWidth}
+				transition='all .5s'
+				h='100vh'
+				overflowY='auto'
+				overflowX='hidden'
+			>
+				<Box w={sidenavWidth} h='full'>
+					<SideNav
+						activeLink={pathname || "/"}
+						isCompressed={navWidth !== sidenavWidth}
+					/>
+				</Box>
 			</Box>
 			<Box
 				transition='all .5s'

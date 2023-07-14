@@ -1,7 +1,7 @@
 import { MainContainer, TaxForm } from "@/components";
 import { ReactQueryHydrate } from "@/components/hydrate-client";
 import { getTaxDetail, taxKeys } from "@/components/taxes/queries";
-import { getQueryClient } from "@/libs";
+import { getQueryClient } from "@/utils";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";
 import { cookies } from "next/headers";

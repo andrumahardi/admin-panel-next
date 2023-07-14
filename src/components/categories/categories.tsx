@@ -81,74 +81,87 @@ export function Categories() {
 					<Text>Category List</Text>
 					<Button
 						as='a'
-						href={URLS.CATEGORY_TYPES_CREATE}
+						href={URLS.CATEGORIES_CREATE}
 						variant='outline'
 						colorScheme='blue'
 					>
 						Add Category
 					</Button>
 				</HStack>
-				<VStack p={4} alignItems='flex-start' spacing={4}>
-					<HStack w='full' justifyContent='space-between'>
-						<PaginationSizeOptions pageSize={pageSize} onChange={setPageSize} />
-						<HStack spacing={2}>
-							<Button size='xs' colorScheme='blue' onClick={selectAll}>
-								Select all
-							</Button>
-							<Button
-								size='xs'
-								colorScheme='blue'
-								isDisabled={contents.every((el) => !el.checked)}
-								onClick={deselectAll}
-							>
-								Deselect all
-							</Button>
-							<Button size='xs' onClick={() => arrayObjectToCSV(contents)}>
-								CSV
-							</Button>
-							<Button size='xs' colorScheme='red' onClick={deleteSelected}>
-								Delete selected
-							</Button>
-						</HStack>
-						<HStack justifyContent='space-between'>
-							<HStack>
-								<Text>Search: </Text>
-								<Input />
+				{contents.length ? (
+					<VStack p={4} alignItems='flex-start' spacing={4}>
+						<HStack w='full' justifyContent='space-between'>
+							<PaginationSizeOptions
+								pageSize={pageSize}
+								onChange={setPageSize}
+							/>
+							<HStack spacing={2}>
+								<Button size='xs' colorScheme='blue' onClick={selectAll}>
+									Select all
+								</Button>
+								<Button
+									size='xs'
+									colorScheme='blue'
+									isDisabled={contents.every((el) => !el.checked)}
+									onClick={deselectAll}
+								>
+									Deselect all
+								</Button>
+								<Button size='xs' onClick={() => arrayObjectToCSV(contents)}>
+									CSV
+								</Button>
+								<Button size='xs' colorScheme='red' onClick={deleteSelected}>
+									Delete selected
+								</Button>
+							</HStack>
+							<HStack justifyContent='space-between'>
+								<HStack>
+									<Text>Search: </Text>
+									<Input />
+								</HStack>
 							</HStack>
 						</HStack>
-					</HStack>
-					<Box w='full'>
-						<DynamicTable
-							data={contents as unknown as GenericObject[]}
-							headColumns={[
-								{
-									key: "id",
-									name: "ID",
-								},
-								{
-									key: "name",
-									name: "Name",
-								},
-							]}
-							toggleSelectRow={toggleSelectRow}
-							handleDelete={handleDelete}
-							rootUrl={rootUrl}
-						/>
-					</Box>
-					<HStack w='full' justifyContent='space-between'>
-						<HStack w='full' justifyContent='space-between'>
-							<Text>
-								Page {page} of {pagination?.pageCount || 1} from{" "}
-								{contents.length} entries
-							</Text>
-							<PaginationButtonGroup
+						<Box w='full'>
+							<DynamicTable
+								data={contents as unknown as GenericObject[]}
+								headColumns={[
+									{
+										key: "id",
+										name: "ID",
+									},
+									{
+										key: "categoryType",
+										name: "Category Type",
+									},
+									{
+										key: "name",
+										name: "Name",
+									},
+								]}
+								toggleSelectRow={toggleSelectRow}
+								handleDelete={handleDelete}
 								rootUrl={rootUrl}
-								currentPage={page}
-								totalPage={+(pagination?.pageCount || 1)}
 							/>
+						</Box>
+						<HStack w='full' justifyContent='space-between'>
+							<HStack w='full' justifyContent='space-between'>
+								<Text>
+									Page {page} of {pagination?.pageCount || 1} from{" "}
+									{contents.length} entries
+								</Text>
+								<PaginationButtonGroup
+									rootUrl={rootUrl}
+									currentPage={page}
+									totalPage={+(pagination?.pageCount || 1)}
+								/>
+							</HStack>
 						</HStack>
-					</HStack>
-				</VStack>
+					</VStack>
+				) : (
+					<VStack p={4}>
+						<Text>This table is still empty</Text>
+					</VStack>
+				)}
 			</Box>
 
 			<Modal isOpen={isOpen} onClose={cancelDelete}>

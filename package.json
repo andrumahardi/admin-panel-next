@@ -6,6 +6,8 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
+		"start:dev": "PORT=3300 next dev",
+		"start:deploy": "next build && PORT=3300 next start",
 		"lint": "eslint src/**/*.ts src/**/*.tsx",
 		"format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
 		"prepare": "npx husky install && npx husky add .husky/pre-commit \"npx lint-staged\""

@@ -8,7 +8,7 @@ import {
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";
 import { ReactQueryHydrate } from "../../components/hydrate-client";
-import { getQueryClient } from "@/libs";
+import { getQueryClient } from "@/utils";
 
 export default async function TaxesPage({
 	searchParams,

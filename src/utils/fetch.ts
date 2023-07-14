@@ -4,22 +4,25 @@ import Cookies from "js-cookie";
 
 export function createClientSideFetch() {
 	const token = Cookies.get("token");
-
-	return axios.create({
+	const fetch = axios.create({
 		baseURL: ENV.api,
 		headers: {
 			"Content-Type": "application/json",
 			...(token ? { Authorization: `Bearer ${token}` } : {}),
 		},
 	});
+
+	return fetch;
 }
 
 export function createServerSideFetch(token?: string) {
-	return axios.create({
+	const fetch = axios.create({
 		baseURL: ENV.api,
 		headers: {
 			"Content-Type": "application/json",
 			...(token ? { Authorization: `Bearer ${token}` } : {}),
 		},
 	});
+
+	return fetch;
 }

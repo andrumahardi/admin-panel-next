@@ -15,8 +15,8 @@ export type CategoriesQuery = {
 
 export type CreateCategoryVariables = {
 	data: {
-		Name: string;
-		Rate: string;
+		name: string;
+		category_type: number;
 	};
 };
 
