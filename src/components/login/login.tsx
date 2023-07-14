@@ -9,7 +9,6 @@ import {
 	Input,
 	Text,
 	VStack,
-	useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useMemo, useReducer } from "react";
@@ -18,13 +17,13 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { URLS } from "@/constants";
 import { useLogin } from "./queries";
-import { errorHandler } from "@/utils";
+import { useErrorHandler } from "@/hooks";
 
 export function Login() {
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const router = useRouter();
-	const { mutate, isLoading } = useLogin();
-	const toast = useToast();
+	const { mutate, isLoading, error } = useLogin();
+	useErrorHandler({ error });
 
 	const canLogin = useMemo(() => {
 		let output = true;
@@ -52,9 +51,6 @@ export function Login() {
 					onSuccess: ({ data }) => {
 						Cookies.set("token", data.jwt || "", { expires: 7 });
 						router.push(URLS.DASHBOARD);
-					},
-					onError: (err) => {
-						errorHandler(err, toast);
 					},
 				}
 			);

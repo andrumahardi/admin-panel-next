@@ -13,10 +13,14 @@ import {
 	VStack,
 	useDisclosure,
 } from "@chakra-ui/react";
-import { usePagination, useTableActions } from "@/hooks";
+import { useErrorHandler, usePagination, useTableActions } from "@/hooks";
 import React from "react";
 import { arrayObjectToCSV } from "@/utils";
-import { PaginationButtonGroup, PaginationSizeOptions } from "@/components";
+import {
+	PaginationButtonGroup,
+	PaginationSizeOptions,
+	TableLoader,
+} from "@/components";
 import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
 import { useDeleteChartOfAccount, useGetChartOfAccounts } from "./queries";
@@ -32,8 +36,17 @@ export function ChartOfAccounts() {
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	const { data, refetch } = useGetChartOfAccounts({ page, pageSize });
-	const { mutate: deleteFn, isLoading: isDeleting } = useDeleteChartOfAccount();
+	const {
+		data,
+		isLoading,
+		error: getError,
+	} = useGetChartOfAccounts({ page, pageSize });
+	const {
+		mutate: deleteFn,
+		isLoading: isDeleting,
+		error: deleteError,
+	} = useDeleteChartOfAccount();
+	useErrorHandler({ error: getError || deleteError });
 
 	const { pagination } = data?.meta || { pagination: {} };
 	const {
@@ -63,10 +76,13 @@ export function ChartOfAccounts() {
 				onSuccess: () => {
 					setSelectedId(null);
 					onClose();
-					refetch();
 				},
 			}
 		);
+	}
+
+	if (isLoading) {
+		return <TableLoader />;
 	}
 
 	return (
@@ -81,7 +97,7 @@ export function ChartOfAccounts() {
 					<Text>Chart of Account List</Text>
 					<Button
 						as='a'
-						href={URLS.CHART_OF_ACCOUNTS}
+						href={URLS.CHART_OF_ACCOUNTS_CREATE}
 						variant='outline'
 						colorScheme='blue'
 					>
@@ -167,7 +183,7 @@ export function ChartOfAccounts() {
 					</VStack>
 				) : (
 					<VStack p={4}>
-						<Text>This table is still empty</Text>
+						<Text>This table is empty ;(</Text>
 					</VStack>
 				)}
 			</Box>

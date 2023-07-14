@@ -73,8 +73,6 @@ export function ChartOfAccountForm(props: Props) {
 		if (!disableSubmit) {
 			const payload = {
 				data: {
-					account: state.values.account,
-					type: state.values.type,
 					name: state.values.name,
 					code: state.values.code,
 				},
@@ -107,34 +105,10 @@ export function ChartOfAccountForm(props: Props) {
 					borderColor='#eaeaea'
 					justifyContent='space-between'
 				>
-					<Text>{props.id ? "Update" : "Create"} Tax</Text>
+					<Text>{props.id ? "Update" : "Create"} Chart of Account</Text>
 				</HStack>
 				<form onSubmit={onSubmit}>
 					<VStack p={4} alignItems='flex-start' spacing={4}>
-						<FormControl isInvalid={Boolean(state.errors.account)}>
-							<FormLabel>Account</FormLabel>
-							<Input
-								name='account'
-								value={state.values.account}
-								onChange={onChange}
-								placeholder='Input Account'
-							/>
-							{state.errors.account && (
-								<FormErrorMessage>{state.errors.account}</FormErrorMessage>
-							)}
-						</FormControl>
-						<FormControl isInvalid={Boolean(state.errors.type)}>
-							<FormLabel>Type</FormLabel>
-							<Input
-								name='type'
-								value={state.values.type}
-								onChange={onChange}
-								placeholder='Input Type'
-							/>
-							{state.errors.type && (
-								<FormErrorMessage>{state.errors.type}</FormErrorMessage>
-							)}
-						</FormControl>
 						<FormControl isInvalid={Boolean(state.errors.name)}>
 							<FormLabel>Name</FormLabel>
 							<Input

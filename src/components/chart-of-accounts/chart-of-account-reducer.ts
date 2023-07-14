@@ -1,8 +1,6 @@
 import { Reducer } from "react";
 
 export type Fields = {
-	account: string;
-	type: string;
 	name: string;
 	code: string;
 };
@@ -21,14 +19,10 @@ export type State = {
 
 export const initialState: State = {
 	values: {
-		account: "",
-		type: "",
 		name: "",
 		code: "",
 	},
 	errors: {
-		account: "",
-		type: "",
 		name: "",
 		code: "",
 	},

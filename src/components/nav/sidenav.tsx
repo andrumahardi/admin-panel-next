@@ -38,8 +38,8 @@ export function SideNav({ activeLink }: Props) {
 	const router = useRouter();
 
 	function handleLogout() {
-		Cookies.remove("token", { expires: 7 });
 		router.push(URLS.LOGIN);
+		Cookies.remove("token", { expires: 7 });
 	}
 
 	return (

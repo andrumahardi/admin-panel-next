@@ -15,8 +15,6 @@ export type ChartOfAccountsQuery = {
 
 export type ChartOfAccountVariables = {
 	data: {
-		account: string;
-		type: string;
 		name: string;
 		code: string;
 	};

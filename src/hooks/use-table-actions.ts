@@ -10,7 +10,9 @@ export function useTableActions({ data }: Props) {
 	const [selectedId, setSelectedId] = useState<number | null>(null);
 
 	useEffect(() => {
-		setContents(data);
+		if (data.length) {
+			setContents(data);
+		}
 	}, [data]);
 
 	function toggleSelectRow(id: number) {

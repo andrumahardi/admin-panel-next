@@ -1,8 +1,9 @@
 import { ENV } from "@/constants";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
+import { cache } from "react";
 
-export function createClientSideFetch() {
+export const createClientSideFetch = cache(() => {
 	const token = Cookies.get("token");
 	const fetch = axios.create({
 		baseURL: ENV.api,
@@ -13,9 +14,9 @@ export function createClientSideFetch() {
 	});
 
 	return fetch;
-}
+});
 
-export function createServerSideFetch(token?: string) {
+export const createServerSideFetch = cache((token?: string) => {
 	const fetch = axios.create({
 		baseURL: ENV.api,
 		headers: {
@@ -25,4 +26,12 @@ export function createServerSideFetch(token?: string) {
 	});
 
 	return fetch;
+});
+
+export function fetchErrorInterceptors(err: AxiosError) {
+	if (window.location) {
+		const status = 500;
+		window.location.assign(`/${status}`);
+	}
+	return Promise.reject(err);
 }

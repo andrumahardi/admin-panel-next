@@ -33,6 +33,10 @@ import {
 	vendorsPathnameMatcher,
 } from "@/middlewares";
 import type { NextRequest } from "next/server";
+import {
+	departmentsMiddleware,
+	departmentsPathnameMatcher,
+} from "./middlewares/departments";
 
 export function middleware(req: NextRequest) {
 	const pathname = req.nextUrl.pathname;
@@ -85,6 +89,9 @@ export function middleware(req: NextRequest) {
 	if (vendorsPathnameMatcher(pathname)) {
 		return vendorsMiddleware(req);
 	}
+	if (departmentsPathnameMatcher(pathname)) {
+		return departmentsMiddleware(req);
+	}
 }
 
 export const config = {
@@ -100,6 +107,7 @@ export const config = {
 		"/chart-of-accounts/:path*",
 		"/corporates/:path*",
 		"/customer-groups/:path*",
+		"/departments/:path*",
 		"/providers/:path*",
 		"/taxes/:path*",
 		"/type-accounts/:path*",

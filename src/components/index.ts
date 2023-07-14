@@ -28,3 +28,4 @@ export * from "./pagination";
 export * from "./permissions";
 export * from "./roles";
 export * from "./table";
+export * from "./loaders";

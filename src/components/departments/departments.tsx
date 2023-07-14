@@ -13,10 +13,14 @@ import {
 	VStack,
 	useDisclosure,
 } from "@chakra-ui/react";
-import { usePagination, useTableActions } from "@/hooks";
+import { useErrorHandler, usePagination, useTableActions } from "@/hooks";
 import React from "react";
 import { arrayObjectToCSV } from "@/utils";
-import { PaginationButtonGroup, PaginationSizeOptions } from "@/components";
+import {
+	PaginationButtonGroup,
+	PaginationSizeOptions,
+	TableLoader,
+} from "@/components";
 import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
 import { useDeleteDepartment, useGetDepartments } from "./queries";
@@ -31,9 +35,17 @@ export function Departments() {
 	} = usePagination({ targetUrl: rootUrl });
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
-
-	const { data, refetch } = useGetDepartments({ page, pageSize });
-	const { mutate: deleteTax, isLoading: isDeleting } = useDeleteDepartment();
+	const {
+		data,
+		isLoading,
+		error: getError,
+	} = useGetDepartments({ page, pageSize });
+	const {
+		mutate: deleteFn,
+		isLoading: isDeleting,
+		error: deleteError,
+	} = useDeleteDepartment();
+	useErrorHandler({ error: getError || deleteError });
 
 	const { pagination } = data?.meta || { pagination: {} };
 	const {
@@ -56,17 +68,20 @@ export function Departments() {
 		onClose();
 	}
 
-	function onDeleteTax() {
-		deleteTax(
+	function onDelete() {
+		deleteFn(
 			{ id: `${selectedId}` },
 			{
 				onSuccess: () => {
 					setSelectedId(null);
 					onClose();
-					refetch();
 				},
 			}
 		);
+	}
+
+	if (isLoading) {
+		return <TableLoader />;
 	}
 
 	return (
@@ -155,7 +170,7 @@ export function Departments() {
 					</VStack>
 				) : (
 					<VStack p={4}>
-						<Text>This table is still empty</Text>
+						<Text>This table is empty ;(</Text>
 					</VStack>
 				)}
 			</Box>
@@ -174,7 +189,7 @@ export function Departments() {
 								</Button>
 								<Button
 									colorScheme='red'
-									onClick={onDeleteTax}
+									onClick={onDelete}
 									isLoading={isDeleting}
 								>
 									Delete
