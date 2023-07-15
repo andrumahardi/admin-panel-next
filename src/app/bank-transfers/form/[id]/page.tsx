@@ -1,9 +1,13 @@
-import { MainContainer, BankTransferForm } from "@/components";
+import {
+	MainContainer,
+	BankTransferForm,
+	ReactQueryHydrate,
+} from "@/components";
 import {
 	bankTransferkeys,
 	getDetailBankTransfer,
-} from "@/components/bank-transfers/queries";
-import { ReactQueryHydrate } from "@/components/hydrate-client";
+} from "@/components/views/bank-transfers/queries";
+
 import { getQueryClient } from "@/utils";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";

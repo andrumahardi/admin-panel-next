@@ -1,15 +1,14 @@
-import { MainContainer } from "@/components";
+import { CategoryTypes, MainContainer, ReactQueryHydrate } from "@/components";
 import { cookies } from "next/headers";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";
-import { ReactQueryHydrate } from "../../components/hydrate-client";
+
 import { getQueryClient } from "@/utils";
 import {
 	CategoryTypesQuery,
 	categoryTypeKeys,
 	getCategoryTypes,
-} from "@/components/category-types/queries";
-import { CategoryTypes } from "@/components/category-types";
+} from "@/components/views/category-types/queries";
 
 export default async function CategoryTypesPage({
 	searchParams,

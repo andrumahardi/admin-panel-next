@@ -1,6 +1,6 @@
 import { MainContainer, Roles } from "@/components";
 
-export default function PermissionsPage() {
+export default function RolesPage() {
 	return (
 		<MainContainer>
 			<Roles />

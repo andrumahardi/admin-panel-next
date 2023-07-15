@@ -1,14 +1,18 @@
-import { ChartOfAccounts, MainContainer } from "@/components";
+import {
+	ChartOfAccounts,
+	MainContainer,
+	ReactQueryHydrate,
+} from "@/components";
 import { cookies } from "next/headers";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";
-import { ReactQueryHydrate } from "../../components/hydrate-client";
+
 import { getQueryClient } from "@/utils";
 import {
 	ChartOfAccountsQuery,
 	chartOfAccountKeys,
 	getChartOfAccounts,
-} from "@/components/chart-of-accounts/queries";
+} from "@/components/views/chart-of-accounts/queries";
 
 export default async function ChartOfAccountsPage({
 	searchParams,

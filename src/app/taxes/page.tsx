@@ -1,14 +1,13 @@
-import { MainContainer, Taxes } from "@/components";
+import { MainContainer, ReactQueryHydrate, Taxes } from "@/components";
 import { cookies } from "next/headers";
+import { createServerSideFetch } from "@/utils";
+import { dehydrate } from "@tanstack/react-query";
+import { getQueryClient } from "@/utils";
 import {
 	TaxesQuery,
 	getTaxes,
 	taxKeys,
-} from "@/components/taxes/queries/tax-queries";
-import { createServerSideFetch } from "@/utils";
-import { dehydrate } from "@tanstack/react-query";
-import { ReactQueryHydrate } from "../../components/hydrate-client";
-import { getQueryClient } from "@/utils";
+} from "@/components/views/taxes/queries";
 
 export default async function TaxesPage({
 	searchParams,

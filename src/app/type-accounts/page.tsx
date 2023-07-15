@@ -1,14 +1,14 @@
-import { MainContainer, TypeAccounts } from "@/components";
+import { MainContainer, ReactQueryHydrate, TypeAccounts } from "@/components";
 import { cookies } from "next/headers";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";
-import { ReactQueryHydrate } from "../../components/hydrate-client";
+
 import { getQueryClient } from "@/utils";
 import {
 	TypeAccountsQuery,
 	getTypeAccounts,
 	typeAccountKeys,
-} from "@/components/type-accounts/queries";
+} from "@/components/views/type-accounts/queries";
 
 export default async function TypeAccountsPage({
 	searchParams,

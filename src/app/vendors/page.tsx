@@ -1,14 +1,14 @@
-import { MainContainer, Vendors } from "@/components";
+import { MainContainer, ReactQueryHydrate, Vendors } from "@/components";
 import { cookies } from "next/headers";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";
-import { ReactQueryHydrate } from "../../components/hydrate-client";
+
 import { getQueryClient } from "@/utils";
 import {
 	VendorsQuery,
 	getVendors,
 	vendorKeys,
-} from "@/components/vendors/queries";
+} from "@/components/views/vendors/queries";
 
 export default async function VendorsPage({
 	searchParams,

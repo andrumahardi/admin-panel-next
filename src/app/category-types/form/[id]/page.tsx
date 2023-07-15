@@ -1,9 +1,13 @@
-import { MainContainer, CategoryTypeForm } from "@/components";
+import {
+	MainContainer,
+	CategoryTypeForm,
+	ReactQueryHydrate,
+} from "@/components";
 import {
 	categoryTypeKeys,
 	getCategoryTypeDetail,
-} from "@/components/category-types/queries";
-import { ReactQueryHydrate } from "@/components/hydrate-client";
+} from "@/components/views/category-types/queries";
+
 import { getQueryClient } from "@/utils";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";

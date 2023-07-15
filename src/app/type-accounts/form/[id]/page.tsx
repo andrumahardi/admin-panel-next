@@ -1,9 +1,13 @@
-import { MainContainer, TypeAccountForm } from "@/components";
-import { ReactQueryHydrate } from "@/components/hydrate-client";
+import {
+	MainContainer,
+	ReactQueryHydrate,
+	TypeAccountForm,
+} from "@/components";
+
 import {
 	getDetailTypeAccount,
 	typeAccountKeys,
-} from "@/components/type-accounts/queries";
+} from "@/components/views/type-accounts/queries";
 import { getQueryClient } from "@/utils";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";

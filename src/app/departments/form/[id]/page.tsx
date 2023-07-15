@@ -1,9 +1,9 @@
-import { MainContainer, DepartmentForm } from "@/components";
+import { MainContainer, DepartmentForm, ReactQueryHydrate } from "@/components";
 import {
 	departmentKeys,
 	getDepartmentDetail,
-} from "@/components/departments/queries";
-import { ReactQueryHydrate } from "@/components/hydrate-client";
+} from "@/components/views/departments/queries";
+
 import { getQueryClient } from "@/utils";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";

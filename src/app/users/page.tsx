@@ -1,5 +1,9 @@
-import { MainContainer } from "@/components";
+import { MainContainer, Users } from "@/components";
 
-export default function PermissionsPage() {
-	return <MainContainer>test</MainContainer>;
+export default function UsersPage() {
+	return (
+		<MainContainer>
+			<Users />
+		</MainContainer>
+	);
 }

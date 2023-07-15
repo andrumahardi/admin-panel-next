@@ -1,14 +1,14 @@
-import { CustomerGroups, MainContainer } from "@/components";
+import { CustomerGroups, MainContainer, ReactQueryHydrate } from "@/components";
 import { cookies } from "next/headers";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";
-import { ReactQueryHydrate } from "../../components/hydrate-client";
+
 import { getQueryClient } from "@/utils";
 import {
 	CustomerGroupsQuery,
 	customerGroupKeys,
 	getCustomerGroups,
-} from "@/components/customer-groups/queries";
+} from "@/components/views/customer-groups/queries";
 
 export default async function CustomerGroupsPage({
 	searchParams,

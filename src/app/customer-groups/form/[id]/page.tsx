@@ -1,9 +1,13 @@
-import { MainContainer, CustomerGroupForm } from "@/components";
+import {
+	MainContainer,
+	CustomerGroupForm,
+	ReactQueryHydrate,
+} from "@/components";
 import {
 	customerGroupKeys,
 	getDetailCustomerGroup,
-} from "@/components/customer-groups/queries";
-import { ReactQueryHydrate } from "@/components/hydrate-client";
+} from "@/components/views/customer-groups/queries";
+
 import { getQueryClient } from "@/utils";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";

@@ -1,5 +1,5 @@
 import React from "react";
-import { Providers } from "./providers";
+import { AppProviders } from "./_providers";
 
 export default function RootLayout({
 	children,
@@ -9,7 +9,7 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body>
-				<Providers>{children}</Providers>
+				<AppProviders>{children}</AppProviders>
 			</body>
 		</html>
 	);

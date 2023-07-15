@@ -1,14 +1,14 @@
-import { BankTransfers, MainContainer } from "@/components";
+import { BankTransfers, MainContainer, ReactQueryHydrate } from "@/components";
 import { cookies } from "next/headers";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";
-import { ReactQueryHydrate } from "../../components/hydrate-client";
+
 import { getQueryClient } from "@/utils";
 import {
 	BankTransfersQuery,
 	bankTransferkeys,
 	getBankTransfers,
-} from "@/components/bank-transfers/queries";
+} from "@/components/views/bank-transfers/queries";
 
 export default async function BankTransfersPage({
 	searchParams,

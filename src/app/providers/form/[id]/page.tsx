@@ -1,9 +1,9 @@
-import { MainContainer, ProviderForm } from "@/components";
-import { ReactQueryHydrate } from "@/components/hydrate-client";
+import { MainContainer, ProviderForm, ReactQueryHydrate } from "@/components";
+
 import {
 	getDetailProvider,
 	providerKeys,
-} from "@/components/providers/queries";
+} from "@/components/views/providers/queries";
 import { getQueryClient } from "@/utils";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";

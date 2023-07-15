@@ -1,9 +1,12 @@
-import { MainContainer, BankAccountForm } from "@/components";
+import {
+	MainContainer,
+	BankAccountForm,
+	ReactQueryHydrate,
+} from "@/components";
 import {
 	bankAccountkeys,
 	getDetailBankAccount,
-} from "@/components/bank-accounts/queries";
-import { ReactQueryHydrate } from "@/components/hydrate-client";
+} from "@/components/views/bank-accounts/queries";
 import { getQueryClient } from "@/utils";
 import { createServerSideFetch } from "@/utils";
 import { dehydrate } from "@tanstack/react-query";
