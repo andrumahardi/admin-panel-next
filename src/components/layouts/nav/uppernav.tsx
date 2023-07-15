@@ -2,10 +2,24 @@
 
 import { LOCAL_ASSETS, URLS } from "@/constants";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import { Box, Button, HStack, IconButton } from "@chakra-ui/react";
+import {
+	Box,
+	Button,
+	HStack,
+	IconButton,
+	LinkBox,
+	LinkOverlay,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
+	Text,
+} from "@chakra-ui/react";
 import Cookies from "js-cookie";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LockResetIcon from "@mui/icons-material/LockReset";
+import { ImageFill } from "@/components/ui";
 
 type Props = {
 	onClick: () => void;
@@ -31,30 +45,44 @@ export function UpperNav({ onClick }: Props) {
 				<HamburgerIcon boxSize='20px' />
 			</IconButton>
 
-			<HStack px={2}>
-				<Box>
-					<Box w='30px' h='30px' borderRadius='50%' position='relative'>
-						<Image
-							src={LOCAL_ASSETS.PROFILE_PIC_DEFAULT}
-							alt='profile picture default'
-							fill
-							style={{ objectFit: "cover", objectPosition: "center" }}
-						/>
-					</Box>
-				</Box>
-				<Button
-					px={4}
-					py={2}
-					w='full'
-					variant='unstyled'
-					fontWeight='medium'
-					_hover={{ bgColor: "#e9e9e9" }}
-					textAlign='left'
-					onClick={handleLogout}
-				>
-					Logout
-				</Button>
-			</HStack>
+			<Box>
+				<Menu>
+					<MenuButton
+						as={Button}
+						size='sm'
+						colorScheme='blue'
+						variant='outline'
+					>
+						<HStack spacing={4}>
+							<ImageFill
+								src={LOCAL_ASSETS.PROFILE_PIC_DEFAULT}
+								alt='profile picture'
+								wrapperProps={{
+									boxSize: "20px",
+									borderRadius: "50%",
+								}}
+							/>
+							<Text>Profile</Text>
+						</HStack>
+					</MenuButton>
+					<MenuList p={2}>
+						<MenuItem>
+							<LinkBox as={HStack} spacing={3} fontSize='sm'>
+								<LockResetIcon fontSize='small' />
+								<LinkOverlay fontWeight='medium' href={URLS.RESET_PASSWORD}>
+									Change Password
+								</LinkOverlay>
+							</LinkBox>
+						</MenuItem>
+						<MenuItem as='button' onClick={handleLogout} fontSize='sm'>
+							<LogoutIcon fontSize='small' />
+							<Text ml={3} fontWeight='medium'>
+								Logout
+							</Text>
+						</MenuItem>
+					</MenuList>
+				</Menu>
+			</Box>
 		</HStack>
 	);
 }

@@ -1,9 +1,8 @@
 import { ENV } from "@/constants";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
-import { cache } from "react";
 
-export const createClientSideFetch = cache(() => {
+export const createClientSideFetch = () => {
 	const token = Cookies.get("token");
 	const fetch = axios.create({
 		baseURL: ENV.api,
@@ -14,9 +13,9 @@ export const createClientSideFetch = cache(() => {
 	});
 
 	return fetch;
-});
+};
 
-export const createServerSideFetch = cache((token?: string) => {
+export const createServerSideFetch = (token?: string) => {
 	const fetch = axios.create({
 		baseURL: ENV.api,
 		headers: {
@@ -26,7 +25,7 @@ export const createServerSideFetch = cache((token?: string) => {
 	});
 
 	return fetch;
-});
+};
 
 export function fetchErrorInterceptors(err: AxiosError) {
 	if (window.location) {

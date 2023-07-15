@@ -56,6 +56,7 @@ export function SideNav({ activeLink }: Props) {
 										display='flex'
 										justifyContent='space-between'
 										_hover={{ bgColor: linkHoverBgColor }}
+										borderRadius='5px'
 										aria-expanded='true'
 									>
 										<Text color={linkButtonColor} fontWeight='medium'>

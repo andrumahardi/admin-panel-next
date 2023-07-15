@@ -99,8 +99,4 @@ export const sidemenu = [
 		name: "Journal Account",
 		link: URLS.JOURNAL_OF_ACCOUNTS,
 	},
-	{
-		name: "Change Password",
-		link: URLS.RESET_PASSWORD,
-	},
 ];
