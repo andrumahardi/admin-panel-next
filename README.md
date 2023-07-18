@@ -6,7 +6,7 @@ ERP Finance FE
 
 Local development
 
-* Node Version: v16.19.1
+- Node Version: v16.19.1
 
 ## Run Local Development
 
@@ -18,8 +18,7 @@ yarn prepare
 yarn start:dev
 ```
 
-
-## Deploy 
+## Deploy
 
 ```bash
 docker build -t erp-web .

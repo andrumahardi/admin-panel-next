@@ -8,4 +8,4 @@ RUN yarn install --ignore-scripts
 
 EXPOSE 3300
 
-CMD ["yarn", "start:dev"]
+CMD ["yarn", "start:deploy"]
