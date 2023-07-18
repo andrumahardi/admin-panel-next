@@ -4,6 +4,10 @@ import {
 	ReactQueryHydrate,
 } from "@/components";
 import {
+	bankAccountkeys,
+	getBankAccounts,
+} from "@/components/views/bank-accounts/queries";
+import {
 	bankTransferkeys,
 	getDetailBankTransfer,
 } from "@/components/views/bank-transfers/queries";
@@ -23,10 +27,19 @@ export default async function BankTransferUpdatePage(props: Props) {
 	const cookie = cookies();
 	const token = cookie.get("token")?.value || "";
 	const queryClient = getQueryClient();
-	await queryClient.prefetchQuery(bankTransferkeys.detail(), async () => {
-		const fetch = createServerSideFetch(token);
-		return await getDetailBankTransfer(props.params.id || "", fetch);
-	});
+	await Promise.all([
+		await queryClient.prefetchQuery(
+			bankAccountkeys.list({ page: 1, pageSize: 10 }),
+			async () => {
+				const fetch = createServerSideFetch(token);
+				return await getBankAccounts({ page: 1, pageSize: 10 }, fetch);
+			}
+		),
+		queryClient.prefetchQuery(bankTransferkeys.detail(), async () => {
+			const fetch = createServerSideFetch(token);
+			return await getDetailBankTransfer(props.params.id || "", fetch);
+		}),
+	]);
 	const dehydratedState = dehydrate(queryClient);
 
 	return (

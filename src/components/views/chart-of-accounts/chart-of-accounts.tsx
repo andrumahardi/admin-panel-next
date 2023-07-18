@@ -41,7 +41,11 @@ export function ChartOfAccounts() {
 		isLoading,
 		error: getError,
 		refetch,
-	} = useGetChartOfAccounts({ page, pageSize });
+	} = useGetChartOfAccounts({
+		page,
+		pageSize,
+		populate: ["category_account", "type_account"],
+	});
 	const {
 		mutate: deleteFn,
 		isLoading: isDeleting,
@@ -148,11 +152,11 @@ export function ChartOfAccounts() {
 										name: "ID",
 									},
 									{
-										key: "account",
+										key: "categoryAccount",
 										name: "Account",
 									},
 									{
-										key: "type",
+										key: "typeAccount",
 										name: "Type",
 									},
 									{

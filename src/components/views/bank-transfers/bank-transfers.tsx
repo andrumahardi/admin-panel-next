@@ -41,7 +41,11 @@ export function BankTransfers() {
 		isLoading,
 		error: getError,
 		refetch,
-	} = useGetBankTransfers({ page, pageSize });
+	} = useGetBankTransfers({
+		page,
+		pageSize,
+		populate: ["from_bank_account", "to_bank_account"],
+	});
 	const {
 		mutate: deleteFn,
 		isLoading: isDeleting,

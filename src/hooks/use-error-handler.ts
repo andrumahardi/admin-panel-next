@@ -17,16 +17,15 @@ export function useErrorHandler({ error }: Props) {
 				position: "top-right",
 				duration: 2e3,
 			};
+			const errData: FetchFailed | FetchError =
+				error.response?.data || ({} as FetchFailed | FetchError);
 
-			if (((error.response?.data as FetchFailed).message || []).length) {
+			if (((errData as FetchFailed).message || []).length) {
 				toastOptions.description =
-					(error.response?.data as FetchFailed).message[0]?.messages[0]
-						?.message || "";
+					(errData as FetchFailed).message[0]?.messages[0]?.message || "";
 			}
-			if (((error.response?.data as FetchError).error || {}).message) {
-				toastOptions.description = (
-					error.response?.data as FetchError
-				).error.message;
+			if (((errData as FetchError).error || {}).message) {
+				toastOptions.description = (errData as FetchError).error.message;
 			}
 
 			toast(toastOptions);

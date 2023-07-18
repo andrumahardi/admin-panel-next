@@ -41,7 +41,7 @@ export function Corporates() {
 		isLoading,
 		error: getError,
 		refetch,
-	} = useGetCorporates({ page, pageSize });
+	} = useGetCorporates({ page, pageSize, populate: "customer_group" });
 	const {
 		mutate: deleteFn,
 		isLoading: isDeleting,

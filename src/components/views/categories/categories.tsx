@@ -39,7 +39,7 @@ export function Categories() {
 		data,
 		isLoading,
 		error: getError,
-	} = useGetCategories({ page, pageSize });
+	} = useGetCategories({ page, pageSize, populate: "category_type" });
 	const {
 		mutate: deleteFn,
 		isLoading: isDeleting,

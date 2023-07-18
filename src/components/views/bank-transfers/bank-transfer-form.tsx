@@ -8,6 +8,7 @@ import {
 	FormLabel,
 	HStack,
 	Input,
+	Select,
 	Text,
 	Textarea,
 	VStack,
@@ -22,6 +23,7 @@ import {
 } from "./queries";
 import { useRouter } from "next/navigation";
 import { useErrorHandler } from "@/hooks";
+import { useGetBankAccounts } from "../bank-accounts/queries";
 
 type Props = {
 	id?: string;
@@ -44,8 +46,11 @@ export function BankTransferForm(props: Props) {
 		id: props.id || "",
 		options: { enabled: !!props.id },
 	});
+	const { data: bankAccounts, error: getBankAccountError } = useGetBankAccounts(
+		{ page: 1, pageSize: 10 }
+	);
 	useErrorHandler({
-		error: createError || updateError || detailError,
+		error: createError || updateError || detailError || getBankAccountError,
 	});
 
 	const [state, dispatch] = useReducer(reducer, {
@@ -58,12 +63,16 @@ export function BankTransferForm(props: Props) {
 						date: (data?.data || {}).date || "",
 						reference: (data?.data || {}).reference || "",
 						description: (data?.data || {}).description || "",
+						fromAccount: (data?.data || {}).fromAccount || "",
+						toAccount: (data?.data || {}).toAccount || "",
 					},
 			  }
 			: { ...initialState }),
 	} as State);
 
-	function onChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+	function onChange(
+		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+	) {
 		dispatch({
 			name: e.target.name as keyof Fields,
 			value: e.target.value,
@@ -85,6 +94,8 @@ export function BankTransferForm(props: Props) {
 					date: state.values.date,
 					reference: state.values.reference,
 					description: state.values.description,
+					from_bank_account: state.values.fromAccount,
+					to_bank_account: state.values.toAccount,
 				},
 			};
 			if (props.id) {
@@ -119,6 +130,42 @@ export function BankTransferForm(props: Props) {
 				</HStack>
 				<form onSubmit={onSubmit}>
 					<VStack p={4} alignItems='flex-start' spacing={4}>
+						<FormControl isInvalid={Boolean(state.errors.fromAccount)}>
+							<FormLabel>From Bank Account</FormLabel>
+							<Select
+								name='fromAccount'
+								placeholder='Select Bank Account'
+								value={state.values.fromAccount}
+								onChange={onChange}
+							>
+								{(bankAccounts?.data || []).map((el) => (
+									<React.Fragment key={el.id}>
+										<option value={el.id}>{el.holderName}</option>
+									</React.Fragment>
+								))}
+							</Select>
+							{state.errors.fromAccount && (
+								<FormErrorMessage>{state.errors.fromAccount}</FormErrorMessage>
+							)}
+						</FormControl>
+						<FormControl isInvalid={Boolean(state.errors.toAccount)}>
+							<FormLabel>To Bank Account</FormLabel>
+							<Select
+								name='toAccount'
+								placeholder='Select Bank Account'
+								value={state.values.toAccount}
+								onChange={onChange}
+							>
+								{(bankAccounts?.data || []).map((el) => (
+									<React.Fragment key={el.id}>
+										<option value={el.id}>{el.holderName}</option>
+									</React.Fragment>
+								))}
+							</Select>
+							{state.errors.toAccount && (
+								<FormErrorMessage>{state.errors.toAccount}</FormErrorMessage>
+							)}
+						</FormControl>
 						<FormControl isInvalid={Boolean(state.errors.amount)}>
 							<FormLabel>Transfer Amount</FormLabel>
 							<Input

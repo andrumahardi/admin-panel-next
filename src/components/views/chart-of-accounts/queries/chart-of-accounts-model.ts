@@ -2,16 +2,20 @@ type ListResponse = {
 	data: Array<{
 		id: number;
 		attributes: {
-			account_id: {
-				id: number;
-				attributes: {
-					name: string;
+			category_account: {
+				data: {
+					id: number;
+					attributes: {
+						name: string;
+					};
 				};
 			};
-			type_id: {
-				id: number;
-				attributes: {
-					name: string;
+			type_account: {
+				data: {
+					id: number;
+					attributes: {
+						name: string;
+					};
 				};
 			};
 			name: string;
@@ -23,16 +27,20 @@ type ListResponse = {
 type DetailResponse = {
 	data: {
 		attributes: {
-			account_id: {
-				id: number;
-				attributes: {
-					name: string;
+			category_account: {
+				data: {
+					id: number;
+					attributes: {
+						name: string;
+					};
 				};
 			};
-			type_id: {
-				id: number;
-				attributes: {
-					name: string;
+			type_account: {
+				data: {
+					id: number;
+					attributes: {
+						name: string;
+					};
 				};
 			};
 			name: string;
@@ -44,8 +52,9 @@ type DetailResponse = {
 export function listModel({ data }: ListResponse) {
 	return data.map(({ attributes, id }) => ({
 		id: id,
-		account: (attributes.account_id || {}).attributes?.name || "-",
-		type: (attributes.type_id || {}).attributes?.name || "-",
+		categoryAccount:
+			(attributes.category_account?.data || {}).attributes?.name || "-",
+		typeAccount: (attributes.type_account?.data || {}).attributes?.name || "-",
 		name: attributes.name || "-",
 		code: attributes.code || "-",
 		checked: false,
@@ -55,8 +64,8 @@ export function listModel({ data }: ListResponse) {
 export function detailModel({ data }: DetailResponse) {
 	const { attributes } = data;
 	return {
-		account: (attributes.account_id || {}).attributes?.name || "",
-		type: (attributes.type_id || {}).attributes?.name || "",
+		categoryAccount: (attributes.category_account?.data || {}).id || "",
+		typeAccount: (attributes.type_account?.data || {}).id || "",
 		name: attributes.name || "",
 		code: attributes.code || "",
 	};

@@ -24,6 +24,7 @@ export default async function ChartOfAccountsPage({
 	const query = {
 		page: +(searchParams.page || 1),
 		pageSize: +(searchParams.pageSize || 10),
+		populate: ["category_account", "type_account"],
 	};
 	const queryClient = getQueryClient();
 	await queryClient.prefetchQuery(chartOfAccountKeys.list(query), async () => {

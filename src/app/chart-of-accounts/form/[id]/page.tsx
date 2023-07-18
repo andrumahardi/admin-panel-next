@@ -4,6 +4,10 @@ import {
 	ReactQueryHydrate,
 } from "@/components";
 import {
+	categoryAccountKeys,
+	getCategoryAccounts,
+} from "@/components/views/category-accounts/queries";
+import {
 	chartOfAccountKeys,
 	getDetailChartOfAccount,
 } from "@/components/views/chart-of-accounts/queries";
@@ -37,6 +41,13 @@ export default async function ChartOfAccountUpdatePage(props: Props) {
 			async () => {
 				const fetch = createServerSideFetch(token);
 				return await getTypeAccounts({ page: 1, pageSize: 10 }, fetch);
+			}
+		),
+		queryClient.prefetchQuery(
+			categoryAccountKeys.list({ page: 1, pageSize: 10 }),
+			async () => {
+				const fetch = createServerSideFetch(token);
+				return await getCategoryAccounts({ page: 1, pageSize: 10 }, fetch);
 			}
 		),
 	]);

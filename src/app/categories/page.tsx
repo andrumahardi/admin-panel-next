@@ -20,6 +20,7 @@ export default async function CategoriesPage({
 	const query = {
 		page: +(searchParams.page || 1),
 		pageSize: +(searchParams.pageSize || 10),
+		populate: "category_type",
 	};
 	const queryClient = getQueryClient();
 	await queryClient.prefetchQuery(categoryKeys.list(query), async () => {

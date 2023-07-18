@@ -11,6 +11,7 @@ import { listModel, detailModel } from "./bank-transfers-model";
 export type BankTransfersQuery = {
 	page: number;
 	pageSize: number;
+	populate?: string | string[];
 };
 
 export type CreateBankTransferVariables = {
@@ -19,6 +20,8 @@ export type CreateBankTransferVariables = {
 		date: string; // format "YYYY-MM-DD"
 		reference: string;
 		description: string;
+		from_bank_account: string;
+		to_bank_account: string;
 	};
 };
 

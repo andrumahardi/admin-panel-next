@@ -28,6 +28,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useErrorHandler } from "@/hooks";
 import { useGetTypeAccounts } from "../type-accounts/queries";
+import { useGetCategoryAccounts } from "../category-accounts/queries";
 
 type Props = {
 	id?: string;
@@ -54,8 +55,18 @@ export function ChartOfAccountForm(props: Props) {
 		page: 1,
 		pageSize: 10,
 	});
+	const { data: categoryAccounts, error: categoryAccountsError } =
+		useGetCategoryAccounts({
+			page: 1,
+			pageSize: 10,
+		});
 	useErrorHandler({
-		error: createError || updateError || detailError || typeAccountsError,
+		error:
+			createError ||
+			updateError ||
+			detailError ||
+			typeAccountsError ||
+			categoryAccountsError,
 	});
 
 	const [state, dispatch] = useReducer(reducer, {
@@ -64,8 +75,8 @@ export function ChartOfAccountForm(props: Props) {
 					...initialState,
 					values: {
 						...initialState.values,
-						account: (data?.data || {}).account,
-						type: (data?.data || {}).type,
+						account: (data?.data || {}).categoryAccount,
+						type: (data?.data || {}).typeAccount,
 						name: (data?.data || {}).name,
 						code: (data?.data || {}).code,
 					},
@@ -95,6 +106,8 @@ export function ChartOfAccountForm(props: Props) {
 				data: {
 					name: state.values.name,
 					code: state.values.code,
+					type_account: state.values.type,
+					category_account: state.values.account,
 				},
 			};
 			if (props.id) {
@@ -130,14 +143,14 @@ export function ChartOfAccountForm(props: Props) {
 				<form onSubmit={onSubmit}>
 					<VStack p={4} alignItems='flex-start' spacing={4}>
 						<FormControl isInvalid={Boolean(state.errors.account)}>
-							<FormLabel>Account</FormLabel>
+							<FormLabel>Category Account</FormLabel>
 							<Select
 								name='account'
-								placeholder='Select Account'
+								placeholder='Select Category Account'
 								value={state.values.account}
 								onChange={onChange}
 							>
-								{(typeAccounts?.data || []).map((el) => (
+								{(categoryAccounts?.data || []).map((el) => (
 									<React.Fragment key={el.id}>
 										<option value={el.id}>{el.name}</option>
 									</React.Fragment>
@@ -148,10 +161,10 @@ export function ChartOfAccountForm(props: Props) {
 							)}
 						</FormControl>
 						<FormControl isInvalid={Boolean(state.errors.type)}>
-							<FormLabel>Type</FormLabel>
+							<FormLabel>Type Account</FormLabel>
 							<Select
 								name='type'
-								placeholder='Select Type'
+								placeholder='Select Type Account'
 								value={state.values.type}
 								onChange={onChange}
 							>

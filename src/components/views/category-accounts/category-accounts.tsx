@@ -151,10 +151,6 @@ export function CategoryAccounts() {
 										key: "name",
 										name: "Name",
 									},
-									{
-										key: "publishedAt",
-										name: "Published Date",
-									},
 								]}
 								toggleSelectRow={toggleSelectRow}
 								handleDelete={handleDelete}

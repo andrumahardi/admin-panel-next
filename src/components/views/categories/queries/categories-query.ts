@@ -11,6 +11,7 @@ import { categoryListModel, categoryDetailModel } from "./categories-model";
 export type CategoriesQuery = {
 	page: number;
 	pageSize: number;
+	populate?: string | string[];
 };
 
 export type CreateCategoryVariables = {

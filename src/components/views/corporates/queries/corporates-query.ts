@@ -11,6 +11,7 @@ import { listModel, detailModel } from "./corporates-model";
 export type CorporatesQuery = {
 	page: number;
 	pageSize: number;
+	populate?: string | string[];
 };
 
 export type CreateCorporateVariables = {

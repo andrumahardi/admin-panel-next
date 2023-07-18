@@ -11,12 +11,15 @@ import { listModel, detailModel } from "./chart-of-accounts-model";
 export type ChartOfAccountsQuery = {
 	page: number;
 	pageSize: number;
+	populate?: string | string[];
 };
 
 export type ChartOfAccountVariables = {
 	data: {
 		name: string;
 		code: string;
+		category_account: string;
+		type_account: string;
 	};
 };
 

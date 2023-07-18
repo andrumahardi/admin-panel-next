@@ -21,11 +21,20 @@ export default async function BankTransfersPage({
 		page: +(searchParams.page || 1),
 		pageSize: +(searchParams.pageSize || 10),
 	};
+
+	const bankTransferQuery = {
+		...query,
+		populate: ["from_bank_account", "to_bank_account"],
+	};
+
 	const queryClient = getQueryClient();
-	await queryClient.prefetchQuery(bankTransferkeys.list(query), async () => {
-		const fetch = createServerSideFetch(token);
-		return await getBankTransfers(query, fetch);
-	});
+	await queryClient.prefetchQuery(
+		bankTransferkeys.list(bankTransferQuery),
+		async () => {
+			const fetch = createServerSideFetch(token);
+			return await getBankTransfers(bankTransferQuery, fetch);
+		}
+	);
 	const dehydratedState = dehydrate(queryClient);
 
 	return (

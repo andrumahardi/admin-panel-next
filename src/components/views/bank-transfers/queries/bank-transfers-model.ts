@@ -6,7 +6,7 @@ type ListResponse = {
 			date: string;
 			reference: string;
 			description: string;
-			from_account_id: {
+			from_bank_account: {
 				data: {
 					id: number;
 					attributes: {
@@ -15,7 +15,7 @@ type ListResponse = {
 					};
 				};
 			};
-			to_account_id: {
+			to_bank_account: {
 				data: {
 					id: number;
 					attributes: {
@@ -35,7 +35,7 @@ type DetailResponse = {
 			date: string;
 			reference: string;
 			description: string;
-			from_account_id: {
+			from_bank_account: {
 				data: {
 					id: number;
 					attributes: {
@@ -44,7 +44,7 @@ type DetailResponse = {
 					};
 				};
 			};
-			to_account_id: {
+			to_bank_account: {
 				data: {
 					id: number;
 					attributes: {
@@ -65,10 +65,10 @@ export function listModel({ data }: ListResponse) {
 		reference: attributes.reference || "-",
 		description: attributes.description || "-",
 		fromAccount:
-			((attributes.from_account_id || {}).data || {}).attributes?.holder_name ||
-			"-",
+			((attributes.from_bank_account || {}).data || {}).attributes
+				?.holder_name || "-",
 		toAccount:
-			((attributes.to_account_id || {}).data || {}).attributes?.holder_name ||
+			((attributes.to_bank_account || {}).data || {}).attributes?.holder_name ||
 			"-",
 		checked: false,
 	}));
@@ -82,10 +82,10 @@ export function detailModel({ data }: DetailResponse) {
 		reference: attributes.reference || "",
 		description: attributes.description || "",
 		fromAccount:
-			((attributes.from_account_id || {}).data || {}).attributes?.holder_name ||
-			"",
+			((attributes.from_bank_account || {}).data || {}).attributes
+				?.holder_name || "",
 		toAccount:
-			((attributes.to_account_id || {}).data || {}).attributes?.holder_name ||
+			((attributes.to_bank_account || {}).data || {}).attributes?.holder_name ||
 			"",
 	};
 }

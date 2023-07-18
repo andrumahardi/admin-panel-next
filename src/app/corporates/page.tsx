@@ -20,6 +20,7 @@ export default async function CorporatesPage({
 	const query = {
 		page: +(searchParams.page || 1),
 		pageSize: +(searchParams.pageSize || 10),
+		populate: "customer_group",
 	};
 	const queryClient = getQueryClient();
 	await queryClient.prefetchQuery(corporateKeys.list(query), async () => {
