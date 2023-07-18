@@ -4,7 +4,7 @@ ERP Finance FE
 
 ## Pre Run Requirements
 
-* Node Version: v16.19.1
+Local development
 
 * Node Version: v16.19.1
 
@@ -16,4 +16,13 @@ yarn prepare
 
 # Runing local development
 yarn start:dev
+```
+
+
+## Deploy 
+
+```bash
+docker build -t erp-web .
+
+docker run -p 13300:3300 erp-web
 ```

@@ -1,13 +1,9 @@
-version: "3.8"
+version: "1.0"
 services:
   web:
     build:
       context: ./
-      target: runner
     volumes:
       - .:/app
-    command: yarn start:dev
     ports:
-      - "3300:3300"
-    environment:
-      NODE_ENV: development
+      - "13300:3300"
