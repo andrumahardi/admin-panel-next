@@ -7,12 +7,3 @@ export type FetchError = {
 		details: null;
 	};
 };
-
-export type FetchFailed = {
-	message: {
-		messages: {
-			id: string;
-			message: string;
-		}[];
-	}[];
-};

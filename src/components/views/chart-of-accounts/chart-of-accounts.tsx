@@ -15,7 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { useErrorHandler, usePagination, useTableActions } from "@/hooks";
 import React from "react";
-import { arrayObjectToCSV } from "@/utils";
 import {
 	PaginationButtonGroup,
 	PaginationSizeOptions,
@@ -128,9 +127,6 @@ export function ChartOfAccounts() {
 									onClick={deselectAll}
 								>
 									Deselect all
-								</Button>
-								<Button size='xs' onClick={() => arrayObjectToCSV(contents)}>
-									CSV
 								</Button>
 								<Button size='xs' colorScheme='red' onClick={deleteSelected}>
 									Delete selected

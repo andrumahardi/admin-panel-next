@@ -15,15 +15,19 @@ import {
 } from "@chakra-ui/react";
 import { useErrorHandler, usePagination, useTableActions } from "@/hooks";
 import React from "react";
-import { arrayObjectToCSV } from "@/utils";
 import {
+	ImportButtons,
 	PaginationButtonGroup,
 	PaginationSizeOptions,
 	TableLoader,
 } from "@/components";
 import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
-import { useDeleteCategoryType, useGetCategoryTypes } from "./queries";
+import {
+	useDeleteCategoryType,
+	useExportCategoryTypes,
+	useGetCategoryTypes,
+} from "./queries";
 import { GenericObject } from "@/types";
 
 const rootUrl = URLS.CATEGORY_TYPES;
@@ -43,11 +47,16 @@ export function CategoryTypes() {
 		refetch,
 	} = useGetCategoryTypes({ page, pageSize });
 	const {
+		data: exportData,
+		error: exportError,
+		isLoading: isFetchExportData,
+	} = useExportCategoryTypes();
+	const {
 		mutate: deleteFn,
 		isLoading: isDeleting,
 		error: deleteError,
 	} = useDeleteCategoryType();
-	useErrorHandler({ error: getError || deleteError });
+	useErrorHandler({ error: getError || deleteError || exportError });
 
 	const { pagination } = data?.meta || { pagination: {} };
 	const {
@@ -125,12 +134,17 @@ export function CategoryTypes() {
 								>
 									Deselect all
 								</Button>
-								<Button size='xs' onClick={() => arrayObjectToCSV(contents)}>
-									CSV
-								</Button>
 								<Button size='xs' colorScheme='red' onClick={deleteSelected}>
 									Delete selected
 								</Button>
+								<ImportButtons
+									isLoading={isFetchExportData}
+									blobUrls={{
+										csv: exportData?.data.csv || "",
+										excel: exportData?.data.excel || "",
+									}}
+									title='category-type'
+								/>
 							</HStack>
 							<HStack justifyContent='space-between'>
 								<HStack>

@@ -41,6 +41,7 @@ export const categoryTypeKeys = {
 		"LIST",
 		generateQueryParams(query),
 	],
+	export: () => [...categoryTypeKeys.all, "EXPORT_LIST"],
 	detail: () => [...categoryTypeKeys.all, "DETAIL"],
 };
 
@@ -173,4 +174,34 @@ export function useDeleteCategoryType() {
 		AxiosError<FetchError>,
 		DeleteCategoryTypeVariables
 	>(deleteCategoryType);
+}
+
+export async function exportCategoryTypes(
+	fetch: ReturnType<typeof createClientSideFetch | typeof createServerSideFetch>
+) {
+	const [csv, excel] = await Promise.all([
+		fetch.get("/category-type/export?type=csv"),
+		fetch.get("/category-type/export?type=excel", { responseType: "blob" }),
+	]);
+	return {
+		data: {
+			csv: URL.createObjectURL(
+				new Blob([csv.data], { type: "text/csv;charset=utf-8" })
+			),
+			excel: URL.createObjectURL(excel.data),
+		},
+	};
+}
+
+type ExportCategoryTypesCache = Awaited<ReturnType<typeof exportCategoryTypes>>;
+
+export function useExportCategoryTypes() {
+	return useQuery<
+		ExportCategoryTypesCache,
+		AxiosError<FetchError>,
+		ExportCategoryTypesCache
+	>(categoryTypeKeys.export(), async () => {
+		const fetch = createClientSideFetch();
+		return await exportCategoryTypes(fetch);
+	});
 }

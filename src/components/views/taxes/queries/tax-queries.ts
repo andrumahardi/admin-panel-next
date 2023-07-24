@@ -33,6 +33,7 @@ export const taxKeys = {
 		"LIST",
 		generateQueryParams(query),
 	],
+	export: () => [...taxKeys.all, "EXPORT_LIST"],
 	detail: () => [...taxKeys.all, "DETAIL"],
 };
 
@@ -144,4 +145,33 @@ export function useDeleteTax() {
 		AxiosError<FetchError>,
 		DeleteTaxVariables
 	>(deleteTax);
+}
+
+export async function exportTaxes(
+	fetch: ReturnType<typeof createClientSideFetch | typeof createServerSideFetch>
+) {
+	const [csv, excel] = await Promise.all([
+		fetch.get("/tax/export?type=csv"),
+		fetch.get("/tax/export?type=excel", { responseType: "blob" }),
+	]);
+	return {
+		data: {
+			csv: URL.createObjectURL(
+				new Blob([csv.data], { type: "text/csv;charset=utf-8" })
+			),
+			excel: URL.createObjectURL(excel.data),
+		},
+	};
+}
+
+type ExportTaxesCache = Awaited<ReturnType<typeof exportTaxes>>;
+
+export function useExportTaxes() {
+	return useQuery<ExportTaxesCache, AxiosError<FetchError>, ExportTaxesCache>(
+		taxKeys.export(),
+		async () => {
+			const fetch = createClientSideFetch();
+			return await exportTaxes(fetch);
+		}
+	);
 }

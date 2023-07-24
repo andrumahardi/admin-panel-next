@@ -3,7 +3,6 @@
 import { Box, Button, HStack, Input, Text, VStack } from "@chakra-ui/react";
 import { usePagination, useTableActions } from "@/hooks";
 import React from "react";
-import { arrayObjectToCSV } from "@/utils";
 import { PaginationButtonGroup, PaginationSizeOptions } from "@/components";
 import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
@@ -40,9 +39,6 @@ export function Permissions() {
 							onClick={deselectAll}
 						>
 							Deselect all
-						</Button>
-						<Button size='xs' onClick={() => arrayObjectToCSV(contents)}>
-							CSV
 						</Button>
 						<Button size='xs' colorScheme='red' onClick={deleteSelected}>
 							Delete selected

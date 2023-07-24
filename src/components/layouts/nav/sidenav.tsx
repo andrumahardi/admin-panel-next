@@ -31,7 +31,7 @@ const linkButtonColor = "#c2c7d0";
 const linkHoverBgColor = "#ffffff1a";
 
 export function SideNav({ activeLink }: Props) {
-	const rootLink = activeLink.split("/").slice(0, 2).join("/");
+	const rootLink = `/${activeLink.split("/")[1] || ""}`;
 
 	return (
 		<VStack bgColor='#343a40' alignItems='flex-start' minH='100vh' pb={4}>

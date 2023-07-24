@@ -12,8 +12,8 @@ export function Footer() {
 			bgColor='#ffffff'
 			p={4}
 		>
+			<Text>Klinik SehatQ</Text>
 			<Text>© All rights reserved.</Text>
-			<Text>Version 3.0.0-alpha</Text>
 		</HStack>
 	);
 }

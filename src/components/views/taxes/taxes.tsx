@@ -15,15 +15,15 @@ import {
 } from "@chakra-ui/react";
 import { useErrorHandler, usePagination, useTableActions } from "@/hooks";
 import React from "react";
-import { arrayObjectToCSV } from "@/utils";
 import {
+	ImportButtons,
 	PaginationButtonGroup,
 	PaginationSizeOptions,
 	TableLoader,
 } from "@/components";
 import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
-import { useDeleteTax, useGetTaxes } from "./queries";
+import { useDeleteTax, useExportTaxes, useGetTaxes } from "./queries";
 import { GenericObject } from "@/types";
 
 const rootUrl = URLS.TAXES;
@@ -42,11 +42,16 @@ export function Taxes() {
 		refetch,
 	} = useGetTaxes({ page, pageSize });
 	const {
+		data: exportData,
+		error: exportError,
+		isLoading: isFetchExportData,
+	} = useExportTaxes();
+	const {
 		mutate: deleteFn,
 		isLoading: isDeleting,
 		error: deleteError,
 	} = useDeleteTax();
-	useErrorHandler({ error: getError || deleteError });
+	useErrorHandler({ error: getError || deleteError || exportError });
 
 	const { pagination } = data?.meta || { pagination: {} };
 	const {
@@ -124,12 +129,17 @@ export function Taxes() {
 								>
 									Deselect all
 								</Button>
-								<Button size='xs' onClick={() => arrayObjectToCSV(contents)}>
-									CSV
-								</Button>
 								<Button size='xs' colorScheme='red' onClick={deleteSelected}>
 									Delete selected
 								</Button>
+								<ImportButtons
+									isLoading={isFetchExportData}
+									blobUrls={{
+										csv: exportData?.data.csv || "",
+										excel: exportData?.data.excel || "",
+									}}
+									title='tax'
+								/>
 							</HStack>
 							<HStack justifyContent='space-between'>
 								<HStack>
