@@ -43,6 +43,7 @@ export const corporateKeys = {
 		"LIST",
 		generateQueryParams(query),
 	],
+	export: () => [...corporateKeys.all, "EXPORT_LIST"],
 	detail: () => [...corporateKeys.all, "DETAIL"],
 };
 
@@ -162,4 +163,34 @@ export function useDeleteCorporate() {
 		AxiosError<FetchError>,
 		DeleteCorporateVariables
 	>(deleteCorporate);
+}
+
+export async function exportCorporates(
+	fetch: ReturnType<typeof createClientSideFetch | typeof createServerSideFetch>
+) {
+	const [csv, excel] = await Promise.all([
+		fetch.get("/corporate/export?type=csv"),
+		fetch.get("/corporate/export?type=excel", { responseType: "blob" }),
+	]);
+	return {
+		data: {
+			csv: URL.createObjectURL(
+				new Blob([csv.data], { type: "text/csv;charset=utf-8" })
+			),
+			excel: URL.createObjectURL(excel.data),
+		},
+	};
+}
+
+type ExportCorporatesCache = Awaited<ReturnType<typeof exportCorporates>>;
+
+export function useExportCorporates() {
+	return useQuery<
+		ExportCorporatesCache,
+		AxiosError<FetchError>,
+		ExportCorporatesCache
+	>(corporateKeys.export(), async () => {
+		const fetch = createClientSideFetch();
+		return await exportCorporates(fetch);
+	});
 }

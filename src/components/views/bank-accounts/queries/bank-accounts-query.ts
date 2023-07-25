@@ -40,6 +40,7 @@ export const bankAccountkeys = {
 		"LIST",
 		generateQueryParams(query),
 	],
+	export: () => [...bankAccountkeys.all, "EXPORT_LIST"],
 	detail: () => [...bankAccountkeys.all, "DETAIL"],
 };
 
@@ -164,4 +165,34 @@ export function useDeleteBankAccount() {
 		AxiosError<FetchError>,
 		DeleteBankAccountVariables
 	>(deleteBankAccount);
+}
+
+export async function exportBankAccounts(
+	fetch: ReturnType<typeof createClientSideFetch | typeof createServerSideFetch>
+) {
+	const [csv, excel] = await Promise.all([
+		fetch.get("/bank-account/export?type=csv"),
+		fetch.get("/bank-account/export?type=excel", { responseType: "blob" }),
+	]);
+	return {
+		data: {
+			csv: URL.createObjectURL(
+				new Blob([csv.data], { type: "text/csv;charset=utf-8" })
+			),
+			excel: URL.createObjectURL(excel.data),
+		},
+	};
+}
+
+type ExportBankAccountsCache = Awaited<ReturnType<typeof exportBankAccounts>>;
+
+export function useExportBankAccounts() {
+	return useQuery<
+		ExportBankAccountsCache,
+		AxiosError<FetchError>,
+		ExportBankAccountsCache
+	>(bankAccountkeys.export(), async () => {
+		const fetch = createClientSideFetch();
+		return await exportBankAccounts(fetch);
+	});
 }

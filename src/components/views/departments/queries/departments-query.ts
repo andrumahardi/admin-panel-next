@@ -35,6 +35,7 @@ export const departmentKeys = {
 		"LIST",
 		generateQueryParams(query),
 	],
+	export: () => [...departmentKeys.all, "EXPORT_LIST"],
 	detail: () => [...departmentKeys.all, "DETAIL"],
 };
 
@@ -157,4 +158,34 @@ export function useDeleteDepartment() {
 		AxiosError<FetchError>,
 		DeleteDepartmentVariables
 	>(deleteDepartment);
+}
+
+export async function exportDepartments(
+	fetch: ReturnType<typeof createClientSideFetch | typeof createServerSideFetch>
+) {
+	const [csv, excel] = await Promise.all([
+		fetch.get("/department/export?type=csv"),
+		fetch.get("/department/export?type=excel", { responseType: "blob" }),
+	]);
+	return {
+		data: {
+			csv: URL.createObjectURL(
+				new Blob([csv.data], { type: "text/csv;charset=utf-8" })
+			),
+			excel: URL.createObjectURL(excel.data),
+		},
+	};
+}
+
+type ExportDepartmentsCache = Awaited<ReturnType<typeof exportDepartments>>;
+
+export function useExportDepartments() {
+	return useQuery<
+		ExportDepartmentsCache,
+		AxiosError<FetchError>,
+		ExportDepartmentsCache
+	>(departmentKeys.export(), async () => {
+		const fetch = createClientSideFetch();
+		return await exportDepartments(fetch);
+	});
 }

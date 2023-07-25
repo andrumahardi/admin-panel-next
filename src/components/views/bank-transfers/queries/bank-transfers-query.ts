@@ -44,6 +44,7 @@ export const bankTransferkeys = {
 		"LIST",
 		generateQueryParams(query),
 	],
+	export: () => [...bankTransferkeys.all, "EXPORT_LIST"],
 	detail: () => [...bankTransferkeys.all, "DETAIL"],
 };
 
@@ -176,4 +177,34 @@ export function useDeleteBankTransfer() {
 		AxiosError<FetchError>,
 		DeleteBankTransferVariables
 	>(deleteBankTransfer);
+}
+
+export async function exportBankTransfers(
+	fetch: ReturnType<typeof createClientSideFetch | typeof createServerSideFetch>
+) {
+	const [csv, excel] = await Promise.all([
+		fetch.get("/bank-transfer/export?type=csv"),
+		fetch.get("/bank-transfer/export?type=excel", { responseType: "blob" }),
+	]);
+	return {
+		data: {
+			csv: URL.createObjectURL(
+				new Blob([csv.data], { type: "text/csv;charset=utf-8" })
+			),
+			excel: URL.createObjectURL(excel.data),
+		},
+	};
+}
+
+type ExportBankTransfersCache = Awaited<ReturnType<typeof exportBankTransfers>>;
+
+export function useExportBankTransfers() {
+	return useQuery<
+		ExportBankTransfersCache,
+		AxiosError<FetchError>,
+		ExportBankTransfersCache
+	>(bankTransferkeys.export(), async () => {
+		const fetch = createClientSideFetch();
+		return await exportBankTransfers(fetch);
+	});
 }

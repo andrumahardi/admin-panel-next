@@ -16,13 +16,18 @@ import {
 import { useErrorHandler, usePagination, useTableActions } from "@/hooks";
 import React from "react";
 import {
+	ImportButtons,
 	PaginationButtonGroup,
 	PaginationSizeOptions,
 	TableLoader,
 } from "@/components";
 import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
-import { useDeleteCorporate, useGetCorporates } from "./queries";
+import {
+	useDeleteCorporate,
+	useExportCorporates,
+	useGetCorporates,
+} from "./queries";
 import { GenericObject } from "@/types";
 
 const rootUrl = URLS.CORPORATES;
@@ -42,11 +47,16 @@ export function Corporates() {
 		refetch,
 	} = useGetCorporates({ page, pageSize, populate: "customer_group" });
 	const {
+		data: exportData,
+		error: exportError,
+		isLoading: isFetchExportData,
+	} = useExportCorporates();
+	const {
 		mutate: deleteFn,
 		isLoading: isDeleting,
 		error: deleteError,
 	} = useDeleteCorporate();
-	useErrorHandler({ error: getError || deleteError });
+	useErrorHandler({ error: getError || deleteError || exportError });
 
 	const { pagination } = data?.meta || { pagination: {} };
 	const {
@@ -127,6 +137,14 @@ export function Corporates() {
 								<Button size='xs' colorScheme='red' onClick={deleteSelected}>
 									Delete selected
 								</Button>
+								<ImportButtons
+									isLoading={isFetchExportData}
+									blobUrls={{
+										csv: exportData?.data.csv || "",
+										excel: exportData?.data.excel || "",
+									}}
+									title='corporates'
+								/>
 							</HStack>
 							<HStack justifyContent='space-between'>
 								<HStack>

@@ -17,13 +17,18 @@ import {
 import { useErrorHandler, usePagination, useTableActions } from "@/hooks";
 import React from "react";
 import {
+	ImportButtons,
 	PaginationButtonGroup,
 	PaginationSizeOptions,
 	TableLoader,
 } from "@/components";
 import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
-import { useDeleteBankAccount, useGetBankAccounts } from "./queries";
+import {
+	useDeleteBankAccount,
+	useExportBankAccounts,
+	useGetBankAccounts,
+} from "./queries";
 import { GenericObject } from "@/types";
 
 const rootUrl = URLS.BANK_ACCOUNTS;
@@ -43,11 +48,16 @@ export function BankAccounts() {
 		refetch,
 	} = useGetBankAccounts({ page, pageSize });
 	const {
+		data: exportData,
+		error: exportError,
+		isLoading: isFetchExportData,
+	} = useExportBankAccounts();
+	const {
 		mutate: deleteFn,
 		isLoading: isDeleting,
 		error: deleteError,
 	} = useDeleteBankAccount();
-	useErrorHandler({ error: getError || deleteError });
+	useErrorHandler({ error: getError || deleteError || exportError });
 
 	const { pagination } = data?.meta || { pagination: {} };
 	const {
@@ -128,6 +138,14 @@ export function BankAccounts() {
 								<Button size='xs' colorScheme='red' onClick={deleteSelected}>
 									Delete selected
 								</Button>
+								<ImportButtons
+									isLoading={isFetchExportData}
+									blobUrls={{
+										csv: exportData?.data.csv || "",
+										excel: exportData?.data.excel || "",
+									}}
+									title='bank-accounts'
+								/>
 							</HStack>
 							<HStack justifyContent='space-between'>
 								<HStack>

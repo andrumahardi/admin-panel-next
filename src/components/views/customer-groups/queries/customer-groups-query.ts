@@ -40,6 +40,7 @@ export const customerGroupKeys = {
 		"LIST",
 		generateQueryParams(query),
 	],
+	export: () => [...customerGroupKeys.all, "EXPORT_LIST"],
 	detail: () => [...customerGroupKeys.all, "DETAIL"],
 };
 
@@ -174,4 +175,36 @@ export function useDeleteCustomerGroup() {
 		AxiosError<FetchError>,
 		DeleteCustomerGroupVariables
 	>(deleteCustomerGroup);
+}
+
+export async function exportCustomerGroups(
+	fetch: ReturnType<typeof createClientSideFetch | typeof createServerSideFetch>
+) {
+	const [csv, excel] = await Promise.all([
+		fetch.get("/customer-group/export?type=csv"),
+		fetch.get("/customer-group/export?type=excel", { responseType: "blob" }),
+	]);
+	return {
+		data: {
+			csv: URL.createObjectURL(
+				new Blob([csv.data], { type: "text/csv;charset=utf-8" })
+			),
+			excel: URL.createObjectURL(excel.data),
+		},
+	};
+}
+
+type ExportCustomerGroupsCache = Awaited<
+	ReturnType<typeof exportCustomerGroups>
+>;
+
+export function useExportCustomerGroups() {
+	return useQuery<
+		ExportCustomerGroupsCache,
+		AxiosError<FetchError>,
+		ExportCustomerGroupsCache
+	>(customerGroupKeys.export(), async () => {
+		const fetch = createClientSideFetch();
+		return await exportCustomerGroups(fetch);
+	});
 }

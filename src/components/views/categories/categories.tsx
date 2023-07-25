@@ -16,13 +16,18 @@ import {
 import { useErrorHandler, usePagination, useTableActions } from "@/hooks";
 import React from "react";
 import {
+	ImportButtons,
 	PaginationButtonGroup,
 	PaginationSizeOptions,
 	TableLoader,
 } from "@/components";
 import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
-import { useDeleteCategory, useGetCategories } from "./queries";
+import {
+	useDeleteCategory,
+	useExportCategories,
+	useGetCategories,
+} from "./queries";
 import { GenericObject } from "@/types";
 
 const rootUrl = URLS.CATEGORIES;
@@ -40,11 +45,16 @@ export function Categories() {
 		error: getError,
 	} = useGetCategories({ page, pageSize, populate: "category_type" });
 	const {
+		data: exportData,
+		error: exportError,
+		isLoading: isFetchExportData,
+	} = useExportCategories();
+	const {
 		mutate: deleteFn,
 		isLoading: isDeleting,
 		error: deleteError,
 	} = useDeleteCategory();
-	useErrorHandler({ error: getError || deleteError });
+	useErrorHandler({ error: getError || deleteError || exportError });
 
 	const { pagination } = data?.meta || { pagination: {} };
 	const {
@@ -124,6 +134,14 @@ export function Categories() {
 								<Button size='xs' colorScheme='red' onClick={deleteSelected}>
 									Delete selected
 								</Button>
+								<ImportButtons
+									isLoading={isFetchExportData}
+									blobUrls={{
+										csv: exportData?.data.csv || "",
+										excel: exportData?.data.excel || "",
+									}}
+									title='categories'
+								/>
 							</HStack>
 							<HStack justifyContent='space-between'>
 								<HStack>

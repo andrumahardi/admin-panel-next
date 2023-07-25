@@ -38,6 +38,7 @@ export const providerKeys = {
 		"LIST",
 		generateQueryParams(query),
 	],
+	export: () => [...providerKeys.all, "EXPORT_LIST"],
 	detail: () => [...providerKeys.all, "DETAIL"],
 };
 
@@ -156,4 +157,34 @@ export function useDeleteProvider() {
 		AxiosError<FetchError>,
 		DeleteProviderVariables
 	>(deleteProvider);
+}
+
+export async function exportProviders(
+	fetch: ReturnType<typeof createClientSideFetch | typeof createServerSideFetch>
+) {
+	const [csv, excel] = await Promise.all([
+		fetch.get("/provider/export?type=csv"),
+		fetch.get("/provider/export?type=excel", { responseType: "blob" }),
+	]);
+	return {
+		data: {
+			csv: URL.createObjectURL(
+				new Blob([csv.data], { type: "text/csv;charset=utf-8" })
+			),
+			excel: URL.createObjectURL(excel.data),
+		},
+	};
+}
+
+type ExportProvidersCache = Awaited<ReturnType<typeof exportProviders>>;
+
+export function useExportProviders() {
+	return useQuery<
+		ExportProvidersCache,
+		AxiosError<FetchError>,
+		ExportProvidersCache
+	>(providerKeys.export(), async () => {
+		const fetch = createClientSideFetch();
+		return await exportProviders(fetch);
+	});
 }

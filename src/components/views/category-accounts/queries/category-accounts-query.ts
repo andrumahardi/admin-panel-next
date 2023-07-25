@@ -38,6 +38,7 @@ export const categoryAccountKeys = {
 		"LIST",
 		generateQueryParams(query),
 	],
+	export: () => [...categoryAccountKeys.all, "EXPORT_LIST"],
 	detail: () => [...categoryAccountKeys.all, "DETAIL"],
 };
 
@@ -174,4 +175,36 @@ export function useDeleteCategoryAccount() {
 		AxiosError<FetchError>,
 		DeleteCategoryAccountVariables
 	>(deleteCategoryAccount);
+}
+
+export async function exportCategoryAccounts(
+	fetch: ReturnType<typeof createClientSideFetch | typeof createServerSideFetch>
+) {
+	const [csv, excel] = await Promise.all([
+		fetch.get("/category-account/export?type=csv"),
+		fetch.get("/category-account/export?type=excel", { responseType: "blob" }),
+	]);
+	return {
+		data: {
+			csv: URL.createObjectURL(
+				new Blob([csv.data], { type: "text/csv;charset=utf-8" })
+			),
+			excel: URL.createObjectURL(excel.data),
+		},
+	};
+}
+
+type ExportCategoryAccountsCache = Awaited<
+	ReturnType<typeof exportCategoryAccounts>
+>;
+
+export function useExportCategoryAccounts() {
+	return useQuery<
+		ExportCategoryAccountsCache,
+		AxiosError<FetchError>,
+		ExportCategoryAccountsCache
+	>(categoryAccountKeys.export(), async () => {
+		const fetch = createClientSideFetch();
+		return await exportCategoryAccounts(fetch);
+	});
 }

@@ -70,7 +70,7 @@ export function UpperNav({ onClick }: Props) {
 							<LinkBox as={HStack} spacing={3} fontSize='sm'>
 								<LockResetIcon fontSize='small' />
 								<LinkOverlay fontWeight='medium' href={URLS.RESET_PASSWORD}>
-									Change Password
+									Reset Password
 								</LinkOverlay>
 							</LinkBox>
 						</MenuItem>

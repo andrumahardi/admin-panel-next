@@ -16,13 +16,14 @@ import {
 import { useErrorHandler, usePagination, useTableActions } from "@/hooks";
 import React from "react";
 import {
+	ImportButtons,
 	PaginationButtonGroup,
 	PaginationSizeOptions,
 	TableLoader,
 } from "@/components";
 import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
-import { useDeleteVendor, useGetVendors } from "./queries";
+import { useDeleteVendor, useExportVendors, useGetVendors } from "./queries";
 import { GenericObject } from "@/types";
 
 const rootUrl = URLS.VENDORS;
@@ -42,11 +43,16 @@ export function Vendors() {
 		refetch,
 	} = useGetVendors({ page, pageSize });
 	const {
+		data: exportData,
+		error: exportError,
+		isLoading: isFetchExportData,
+	} = useExportVendors();
+	const {
 		mutate: deleteFn,
 		isLoading: isDeleting,
 		error: deleteError,
 	} = useDeleteVendor();
-	useErrorHandler({ error: getError || deleteError });
+	useErrorHandler({ error: getError || deleteError || exportError });
 
 	const { pagination } = data?.meta || { pagination: {} };
 	const {
@@ -127,6 +133,14 @@ export function Vendors() {
 								<Button size='xs' colorScheme='red' onClick={deleteSelected}>
 									Delete selected
 								</Button>
+								<ImportButtons
+									isLoading={isFetchExportData}
+									blobUrls={{
+										csv: exportData?.data.csv || "",
+										excel: exportData?.data.excel || "",
+									}}
+									title='vendors'
+								/>
 							</HStack>
 							<HStack justifyContent='space-between'>
 								<HStack>

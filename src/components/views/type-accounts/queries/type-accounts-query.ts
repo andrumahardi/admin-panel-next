@@ -35,6 +35,7 @@ export const typeAccountKeys = {
 		"LIST",
 		generateQueryParams(query),
 	],
+	export: () => [...typeAccountKeys.all, "EXPORT_LIST"],
 	detail: () => [...typeAccountKeys.all, "DETAIL"],
 };
 
@@ -159,4 +160,34 @@ export function useDeleteTypeAccount() {
 		AxiosError<FetchError>,
 		DeleteTypeAccountVariables
 	>(deleteTypeAccount);
+}
+
+export async function exportTypeAccounts(
+	fetch: ReturnType<typeof createClientSideFetch | typeof createServerSideFetch>
+) {
+	const [csv, excel] = await Promise.all([
+		fetch.get("/type-account/export?type=csv"),
+		fetch.get("/type-account/export?type=excel", { responseType: "blob" }),
+	]);
+	return {
+		data: {
+			csv: URL.createObjectURL(
+				new Blob([csv.data], { type: "text/csv;charset=utf-8" })
+			),
+			excel: URL.createObjectURL(excel.data),
+		},
+	};
+}
+
+type ExportTypeAccountsCache = Awaited<ReturnType<typeof exportTypeAccounts>>;
+
+export function useExportTypeAccounts() {
+	return useQuery<
+		ExportTypeAccountsCache,
+		AxiosError<FetchError>,
+		ExportTypeAccountsCache
+	>(typeAccountKeys.export(), async () => {
+		const fetch = createClientSideFetch();
+		return await exportTypeAccounts(fetch);
+	});
 }

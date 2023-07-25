@@ -37,6 +37,7 @@ export const vendorKeys = {
 		"LIST",
 		generateQueryParams(query),
 	],
+	export: () => [...vendorKeys.all, "EXPORT_LIST"],
 	detail: () => [...vendorKeys.all, "DETAIL"],
 };
 
@@ -155,4 +156,34 @@ export function useDeleteVendor() {
 		AxiosError<FetchError>,
 		DeleteVendorVariables
 	>(deleteVendor);
+}
+
+export async function exportVendors(
+	fetch: ReturnType<typeof createClientSideFetch | typeof createServerSideFetch>
+) {
+	const [csv, excel] = await Promise.all([
+		fetch.get("/vendor/export?type=csv"),
+		fetch.get("/vendor/export?type=excel", { responseType: "blob" }),
+	]);
+	return {
+		data: {
+			csv: URL.createObjectURL(
+				new Blob([csv.data], { type: "text/csv;charset=utf-8" })
+			),
+			excel: URL.createObjectURL(excel.data),
+		},
+	};
+}
+
+type ExportVendorsCache = Awaited<ReturnType<typeof exportVendors>>;
+
+export function useExportVendors() {
+	return useQuery<
+		ExportVendorsCache,
+		AxiosError<FetchError>,
+		ExportVendorsCache
+	>(vendorKeys.export(), async () => {
+		const fetch = createClientSideFetch();
+		return await exportVendors(fetch);
+	});
 }

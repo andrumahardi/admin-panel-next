@@ -16,13 +16,18 @@ import {
 import { useErrorHandler, usePagination, useTableActions } from "@/hooks";
 import React from "react";
 import {
+	ImportButtons,
 	PaginationButtonGroup,
 	PaginationSizeOptions,
 	TableLoader,
 } from "@/components";
 import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
-import { useDeleteTypeAccount, useGetTypeAccounts } from "./queries";
+import {
+	useDeleteTypeAccount,
+	useExportTypeAccounts,
+	useGetTypeAccounts,
+} from "./queries";
 import { GenericObject } from "@/types";
 
 const rootUrl = URLS.TYPE_ACCOUNTS;
@@ -42,11 +47,16 @@ export function TypeAccounts() {
 		refetch,
 	} = useGetTypeAccounts({ page, pageSize });
 	const {
+		data: exportData,
+		error: exportError,
+		isLoading: isFetchExportData,
+	} = useExportTypeAccounts();
+	const {
 		mutate: deleteFn,
 		isLoading: isDeleting,
 		error: deleteError,
 	} = useDeleteTypeAccount();
-	useErrorHandler({ error: getError || deleteError });
+	useErrorHandler({ error: getError || deleteError || exportError });
 
 	const { pagination } = data?.meta || { pagination: {} };
 	const {
@@ -127,6 +137,14 @@ export function TypeAccounts() {
 								<Button size='xs' colorScheme='red' onClick={deleteSelected}>
 									Delete selected
 								</Button>
+								<ImportButtons
+									isLoading={isFetchExportData}
+									blobUrls={{
+										csv: exportData?.data.csv || "",
+										excel: exportData?.data.excel || "",
+									}}
+									title='type-accounts'
+								/>
 							</HStack>
 							<HStack justifyContent='space-between'>
 								<HStack>

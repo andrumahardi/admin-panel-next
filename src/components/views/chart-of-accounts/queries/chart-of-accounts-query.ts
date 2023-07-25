@@ -42,6 +42,7 @@ export const chartOfAccountKeys = {
 		"LIST",
 		generateQueryParams(query),
 	],
+	export: () => [...chartOfAccountKeys.all, "EXPORT_LIST"],
 	detail: () => [...chartOfAccountKeys.all, "DETAIL"],
 };
 
@@ -176,4 +177,36 @@ export function useDeleteChartOfAccount() {
 		AxiosError<FetchError>,
 		DeleteChartOfAccountVariables
 	>(deleteChartOfAccount);
+}
+
+export async function exportChartOfAccounts(
+	fetch: ReturnType<typeof createClientSideFetch | typeof createServerSideFetch>
+) {
+	const [csv, excel] = await Promise.all([
+		fetch.get("/chart-of-account/export?type=csv"),
+		fetch.get("/chart-of-account/export?type=excel", { responseType: "blob" }),
+	]);
+	return {
+		data: {
+			csv: URL.createObjectURL(
+				new Blob([csv.data], { type: "text/csv;charset=utf-8" })
+			),
+			excel: URL.createObjectURL(excel.data),
+		},
+	};
+}
+
+type ExportChartOfAccountsCache = Awaited<
+	ReturnType<typeof exportChartOfAccounts>
+>;
+
+export function useExportChartOfAccounts() {
+	return useQuery<
+		ExportChartOfAccountsCache,
+		AxiosError<FetchError>,
+		ExportChartOfAccountsCache
+	>(chartOfAccountKeys.export(), async () => {
+		const fetch = createClientSideFetch();
+		return await exportChartOfAccounts(fetch);
+	});
 }

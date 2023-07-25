@@ -16,13 +16,18 @@ import {
 import { useErrorHandler, usePagination, useTableActions } from "@/hooks";
 import React from "react";
 import {
+	ImportButtons,
 	PaginationButtonGroup,
 	PaginationSizeOptions,
 	TableLoader,
 } from "@/components";
 import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
-import { useDeleteDepartment, useGetDepartments } from "./queries";
+import {
+	useDeleteDepartment,
+	useExportDepartments,
+	useGetDepartments,
+} from "./queries";
 import { GenericObject } from "@/types";
 
 const rootUrl = URLS.DEPARTMENTS;
@@ -41,11 +46,16 @@ export function Departments() {
 		refetch,
 	} = useGetDepartments({ page, pageSize });
 	const {
+		data: exportData,
+		error: exportError,
+		isLoading: isFetchExportData,
+	} = useExportDepartments();
+	const {
 		mutate: deleteFn,
 		isLoading: isDeleting,
 		error: deleteError,
 	} = useDeleteDepartment();
-	useErrorHandler({ error: getError || deleteError });
+	useErrorHandler({ error: getError || deleteError || exportError });
 
 	const { pagination } = data?.meta || { pagination: {} };
 	const {
@@ -126,6 +136,14 @@ export function Departments() {
 								<Button size='xs' colorScheme='red' onClick={deleteSelected}>
 									Delete selected
 								</Button>
+								<ImportButtons
+									isLoading={isFetchExportData}
+									blobUrls={{
+										csv: exportData?.data.csv || "",
+										excel: exportData?.data.excel || "",
+									}}
+									title='departments'
+								/>
 							</HStack>
 							<HStack justifyContent='space-between'>
 								<HStack>
