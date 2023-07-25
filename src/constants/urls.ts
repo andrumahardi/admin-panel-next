@@ -7,8 +7,14 @@ export const URLS = {
 	INCOMES: "/incomes",
 	TRANSACTION_CLINICS: "/transaction-clinics",
 	TRANSACTION_MCS: "/transaction-mcs",
-	ROLES: "/roles",
+
 	USERS: "/users",
+	USERS_CREATE: "/users/form",
+	USERS_UPDATE: (id: string | number) => `${URLS.USERS_CREATE}/${id}`,
+
+	ROLES: "/roles",
+	ROLES_CREATE: "/roles/form",
+	ROLES_UPDATE: (id: string | number) => `${URLS.ROLES_CREATE}/${id}`,
 
 	DEPARTMENTS: "/departments",
 	DEPARTMENTS_CREATE: "/departments/form",

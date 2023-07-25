@@ -1,89 +1,220 @@
 "use client";
 
-import { Box, Button, HStack, Input, Text, VStack } from "@chakra-ui/react";
-import { usePagination, useTableActions } from "@/hooks";
+import {
+	Box,
+	Button,
+	HStack,
+	Input,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalOverlay,
+	Text,
+	VStack,
+	useDisclosure,
+} from "@chakra-ui/react";
+import { useErrorHandler, usePagination, useTableActions } from "@/hooks";
 import React from "react";
-import { PaginationButtonGroup, PaginationSizeOptions } from "@/components";
+import {
+	ImportButtons,
+	PaginationButtonGroup,
+	PaginationSizeOptions,
+	TableLoader,
+} from "@/components";
 import { DynamicTable } from "@/components";
 import { URLS } from "@/constants";
+import { useDeleteUser, useExportUsers, useGetUsers } from "./queries";
+import { GenericObject } from "@/types";
 
 const rootUrl = URLS.USERS;
 
 export function Users() {
-	const { contents, selectAll, deselectAll, toggleSelectRow, deleteSelected } =
-		useTableActions({ data: [] });
-
 	const {
 		query: { page, pageSize },
 		setPageSize,
 	} = usePagination({ targetUrl: rootUrl });
 
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const {
+		data,
+		isLoading,
+		error: getError,
+		refetch,
+	} = useGetUsers({ page, pageSize });
+	const {
+		data: exportData,
+		error: exportError,
+		isLoading: isFetchExportData,
+	} = useExportUsers();
+	const {
+		mutate: deleteFn,
+		isLoading: isDeleting,
+		error: deleteError,
+	} = useDeleteUser();
+	useErrorHandler({ error: getError || deleteError || exportError });
+
+	const { pagination } = data?.meta || { pagination: {} };
+	const {
+		contents,
+		selectedId,
+		toggleSelectRow,
+		deleteSelected,
+		selectAll,
+		deselectAll,
+		setSelectedId,
+	} = useTableActions({ data: data?.data || [] });
+
 	function handleDelete(id: number) {
-		return id;
+		setSelectedId(id);
+		onOpen();
+	}
+
+	function cancelDelete() {
+		setSelectedId(null);
+		onClose();
+	}
+
+	function onDelete() {
+		deleteFn(
+			{ id: `${selectedId}` },
+			{
+				onSuccess: () => {
+					refetch();
+					setSelectedId(null);
+					onClose();
+				},
+			}
+		);
+	}
+
+	if (isLoading) {
+		return <TableLoader />;
 	}
 
 	return (
-		<Box bgColor='#ffffff' borderRadius='10px'>
-			<Box p={4} borderBottom='1px solid' borderColor='#eaeaea'>
-				<Text>User List</Text>
-			</Box>
-			<VStack p={4} alignItems='flex-start' spacing={4}>
-				<HStack w='full' justifyContent='space-between'>
-					<PaginationSizeOptions pageSize={pageSize} onChange={setPageSize} />
-					<HStack spacing={2}>
-						<Button size='xs' colorScheme='blue' onClick={selectAll}>
-							Select all
-						</Button>
-						<Button
-							size='xs'
-							colorScheme='blue'
-							isDisabled={contents.every((el) => !el.checked)}
-							onClick={deselectAll}
-						>
-							Deselect all
-						</Button>
-						<Button size='xs' colorScheme='red' onClick={deleteSelected}>
-							Delete selected
-						</Button>
-					</HStack>
-					<HStack justifyContent='space-between'>
-						<HStack>
-							<Text>Search: </Text>
-							<Input />
+		<>
+			<Box bgColor='#ffffff' borderRadius='10px'>
+				<HStack
+					p={4}
+					borderBottom='1px solid'
+					borderColor='#eaeaea'
+					justifyContent='space-between'
+				>
+					<Text>User List</Text>
+					<Button
+						as='a'
+						href={URLS.USERS_CREATE}
+						variant='outline'
+						colorScheme='blue'
+					>
+						Add User
+					</Button>
+				</HStack>
+				{contents.length ? (
+					<VStack p={4} alignItems='flex-start' spacing={4}>
+						<HStack w='full' justifyContent='space-between'>
+							<PaginationSizeOptions
+								pageSize={pageSize}
+								onChange={setPageSize}
+							/>
+							<HStack spacing={2}>
+								<Button size='xs' colorScheme='blue' onClick={selectAll}>
+									Select all
+								</Button>
+								<Button
+									size='xs'
+									colorScheme='blue'
+									isDisabled={contents.every((el) => !el.checked)}
+									onClick={deselectAll}
+								>
+									Deselect all
+								</Button>
+								<Button size='xs' colorScheme='red' onClick={deleteSelected}>
+									Delete selected
+								</Button>
+								<ImportButtons
+									isLoading={isFetchExportData}
+									blobUrls={{
+										csv: exportData?.data.csv || "",
+										excel: exportData?.data.excel || "",
+									}}
+									title='users'
+								/>
+							</HStack>
+							<HStack justifyContent='space-between'>
+								<HStack>
+									<Text>Search: </Text>
+									<Input />
+								</HStack>
+							</HStack>
 						</HStack>
-					</HStack>
-				</HStack>
-				<Box w='full'>
-					<DynamicTable
-						data={contents}
-						headColumns={[
-							{
-								key: "id",
-								name: "ID",
-							},
-							{
-								key: "title",
-								name: "Title",
-							},
-						]}
-						toggleSelectRow={toggleSelectRow}
-						handleDelete={handleDelete}
-						rootUrl={rootUrl}
-					/>
-				</Box>
-				<HStack w='full' justifyContent='space-between'>
-					<HStack w='full' justifyContent='space-between'>
-						<Text>
-							Page {page} of {1} from {contents.length} entries
-						</Text>
-						<PaginationButtonGroup
-							rootUrl={rootUrl}
-							currentPage={page}
-							totalPage={1}
-						/>
-					</HStack>
-				</HStack>
-			</VStack>
-		</Box>
+						<Box w='full'>
+							<DynamicTable
+								data={contents as unknown as GenericObject[]}
+								headColumns={[
+									{
+										key: "id",
+										name: "ID",
+									},
+									{
+										key: "username",
+										name: "User Name",
+									},
+									{
+										key: "email",
+										name: "Email",
+									},
+								]}
+								toggleSelectRow={toggleSelectRow}
+								handleDelete={handleDelete}
+								rootUrl={rootUrl}
+							/>
+						</Box>
+						<HStack w='full' justifyContent='space-between'>
+							<HStack w='full' justifyContent='space-between'>
+								<Text>
+									Page {page} of {pagination?.pageCount || 1} from{" "}
+									{contents.length} entries
+								</Text>
+								<PaginationButtonGroup
+									rootUrl={rootUrl}
+									currentPage={page}
+									totalPage={+(pagination?.pageCount || 1)}
+								/>
+							</HStack>
+						</HStack>
+					</VStack>
+				) : (
+					<VStack p={4}>
+						<Text>This table is empty ;(</Text>
+					</VStack>
+				)}
+			</Box>
+
+			<Modal isOpen={isOpen} onClose={cancelDelete}>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalBody>
+						<VStack spacing={4} p='4'>
+							<Text textAlign='center'>
+								Are you sure you want to delete this content?
+							</Text>
+							<HStack justifyContent='center'>
+								<Button variant='ghost' mr={3} onClick={cancelDelete}>
+									Close
+								</Button>
+								<Button
+									colorScheme='red'
+									onClick={onDelete}
+									isLoading={isDeleting}
+								>
+									Delete
+								</Button>
+							</HStack>
+						</VStack>
+					</ModalBody>
+				</ModalContent>
+			</Modal>
+		</>
 	);
 }

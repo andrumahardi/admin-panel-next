@@ -1,5 +1,5 @@
 const BASE_ENV = {
-	api: "http://192.168.90.54:13371/api",
+	api: "http://service.erpdev.kliniksehatq.com/api",
 };
 
 export const ENV = {
